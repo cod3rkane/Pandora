@@ -3,6 +3,8 @@ project(Pandora)
 
 find_package(PkgConfig REQUIRED)
 
+# set(OpenGL_GL_PREFERENCE "GLVND") # to use new openGL version
+
 find_package(SDL2 REQUIRED)
 include_directories(${SDL2_INCLUDE_DIRS})
 
