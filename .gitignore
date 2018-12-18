@@ -30,3 +30,11 @@
 *.exe
 *.out
 *.app
+
+# Cmake Stuffs
+CMakeCache.txt
+CMakeFiles/*
+Makefile
+cmake_install.cmake
+.vscode/*
+Pandora
