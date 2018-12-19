@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <SDL2/SDL.h>
+#include "management/Render.h"
 
 int WINDOW_WIDTH = 1280;
 int WINDOW_HEIGHT = 720;
@@ -23,15 +24,20 @@ int main() {
   bool quit = false;
   SDL_Event e;
 
+  RenderManagement renderManager = RenderManagement(renderer);
+
   while (!quit) {
+    SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, SDL_ALPHA_OPAQUE);
+    SDL_RenderClear(renderer);
+
     while (SDL_PollEvent(&e) != 0) {
       if (e.type == SDL_QUIT) {
         quit = true;
       }
     }
 
-    SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, SDL_ALPHA_OPAQUE);
-    SDL_RenderClear(renderer);
+    renderManager.render();
+
     SDL_RenderPresent(renderer);
   }
 

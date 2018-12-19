@@ -10,6 +10,10 @@ include_directories(${SDL2_INCLUDE_DIRS})
 
 set(SOURCE_FILES 
   src/Game.cpp
+  src/management/Render.h
+  src/management/Render.cpp
+  src/core/GridMap.h
+  src/core/GridMap.cpp
 )
 
 add_executable(Pandora ${SOURCE_FILES})
