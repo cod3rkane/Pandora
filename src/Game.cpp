@@ -1,73 +1,113 @@
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
 #include <iostream>
 #include <string>
-#include <SDL2/SDL.h>
-#include <GL/glew.h>
-#include "management/Render.h"
+#include <fstream>
+#include <sstream>
 
 int WINDOW_WIDTH = 1280;
 int WINDOW_HEIGHT = 720;
 
-int initSDLFlag(Uint32 flag) {
-  if (SDL_Init(flag) != 0) {
-    std::cout << "SDL_INIT error: " << SDL_GetError() << std::endl;
+std::string loadFile(const GLchar* path) {
+  std::ifstream stream(path, std::ios::binary);
+  std::stringstream strStream;
 
-    return 1;
-  }
+  strStream << stream.rdbuf();
 
-  return 0;
+  stream.close();
+
+  std::string str = strStream.str();
+  
+  return str.c_str();
 }
 
 int main() {
-  initSDLFlag(SDL_INIT_VIDEO);
-  SDL_Window *window = SDL_CreateWindow("Pandora", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
-  SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_SOFTWARE);
-
-  // OpenGL Stuffs
-  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
-  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
-  SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-
-  SDL_GLContext glContext = SDL_GL_CreateContext(window);
-  if (glContext == NULL) {
-    std::cout << "SDL_GL_CreateContext error: " << SDL_GetError() << std::endl;
+  if (!glfwInit()) {
+    std::cout << "ERROR: could not start GLFW3" << std::endl;
 
     return 1;
-  } else {
-    // glew stuffs
-    glewExperimental = GL_TRUE;
-    GLenum glewError = glewInit();
-
-    if (glewError != GLEW_OK) {
-      std::cout << "glewInit error: " << glewGetErrorString(glewError) << std::endl;
-    
-      return 1;      
-    }
   }
 
-  bool quit = false;
-  SDL_Event e;
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+  glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-  RenderManagement renderManager = RenderManagement(renderer);
+  GLFWwindow* window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Pandora", NULL, NULL);
 
-  while (!quit) {
-    //Clear color buffer
-    glClear(GL_COLOR_BUFFER_BIT);
-    SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, SDL_ALPHA_OPAQUE);
-    SDL_RenderClear(renderer);
+  if (!window) {
+    std::cout << "ERROR: could not open window with GLFW" << std::endl;
+    glfwTerminate();
 
-    while (SDL_PollEvent(&e) != 0) {
-      if (e.type == SDL_QUIT) {
-        quit = true;
-      }
-    }
-
-    renderManager.render();
-
-    SDL_RenderPresent(renderer);
+    return 1;
   }
 
-  SDL_DestroyRenderer(renderer);
-  SDL_DestroyWindow(window);
-  SDL_Quit();
+  glfwMakeContextCurrent(window);
+
+  // start glew
+  glewExperimental = GL_TRUE;
+  glewInit();
+
+  // tell GLto only draw onto a pixel if the shape is closer to the view.
+  glEnable(GL_DEPTH_TEST);
+  glDepthFunc(GL_LESS);
+
+  GLfloat points[] = {
+    0.0f, 0.5f, 0.0f,
+    0.5f, -0.5f, 0.0f,
+    -0.5f, -0.5f, 0.0f
+  };
+
+  // We will copy chunk of memory onto the graphicscard in a unit called a vertex buffer object (VBO)
+  // To do this we "generate" an empty buffer, set it as the current buffr in OpenGL's state machine by "binding"
+  // Then copy the points into the currently bound buffer.
+
+  GLuint vbo = 0;
+  glGenBuffers(1, &vbo);
+  glBindBuffer(GL_ARRAY_BUFFER, vbo);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(points), points, GL_STATIC_DRAW);
+
+  // Wehn we want to draw, all we do then is bind the VAO and draw.
+  GLuint vao = 0;
+  glGenVertexArrays(1, &vao);
+  glBindVertexArray(vao);
+  glEnableVertexAttribArray(0);
+  glBindBuffer(GL_ARRAY_BUFFER, vbo);
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+
+  // Compile Shaders
+  std::string vertexCode = loadFile("src/shaders/simple_vert.glsl");
+  std::string fragmentCode = loadFile("src/shaders/simple_frag.glsl");
+
+  const GLchar *vCode = vertexCode.c_str();
+  const GLchar *fCode = fragmentCode.c_str();
+
+  GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
+  glShaderSource(vertexShader, 1, &vCode, NULL);
+  glCompileShader(vertexShader);
+
+  GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+  glShaderSource(fragmentShader, 1, &fCode, NULL);
+  glCompileShader(fragmentShader);
+
+  // Linking Shaders together
+  GLuint shaderProgram = glCreateProgram();
+  glAttachShader(shaderProgram, fragmentShader);
+  glAttachShader(shaderProgram, vertexShader);
+  glLinkProgram(shaderProgram);
+
+  while(!glfwWindowShouldClose(window)) {
+    // wipe the drawing surface clear
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glUseProgram(shaderProgram);
+    glBindVertexArray(vao);
+    // draw points 0-3
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+
+    glfwPollEvents();
+    glfwSwapBuffers(window); // put the stuff we've been drawing onto the display
+  }
+
+  glfwTerminate();
   return 0;
 }
