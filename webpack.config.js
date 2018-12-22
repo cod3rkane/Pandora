@@ -9,7 +9,9 @@ module.exports = {
   devtool: 'inline-source-map', // TODO: must be changed on Production
   devServer: {
     contentBase: './dist',
-    hot: true
+    hot: true,
+    host: '0.0.0.0',
+    disableHostCheck: true
   },
   plugins: [
     new CleanWebpackPlugin(['dist']),
