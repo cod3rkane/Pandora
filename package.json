@@ -1,0 +1,10 @@
+{
+  "name": "Pandora",
+  "version": "1.0.0",
+  "description": "My Game",
+  "main": "src/index.js",
+  "repository": "git@github.com:cod3rkane/Pandora.git",
+  "author": "Cod3rkane <jcesar.developer@gmail.com>",
+  "license": "MIT",
+  "private": true
+}
