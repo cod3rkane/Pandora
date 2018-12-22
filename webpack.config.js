@@ -14,7 +14,7 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin(['dist']),
     new HtmlWebpackPlugin({
-      title: 'Pandora'
+      template: 'src/index.html'
     }),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.ProvidePlugin({
