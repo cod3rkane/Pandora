@@ -6,5 +6,9 @@
   "repository": "git@github.com:cod3rkane/Pandora.git",
   "author": "Cod3rkane <jcesar.developer@gmail.com>",
   "license": "MIT",
-  "private": true
+  "private": true,
+  "devDependencies": {
+    "webpack": "^4.28.2",
+    "webpack-cli": "^3.1.2"
+  }
 }
