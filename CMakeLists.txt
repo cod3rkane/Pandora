@@ -10,6 +10,7 @@ include_directories(${OPENGL_INCLUDE_DIR} ${OPENGL_INCLUDE_DIRS})
 find_package(GLUT REQUIRED)
 include_directories(${GLUT_INCLUDE_DIRS})
 
+find_package(glfw3 3.2 REQUIRED)
 pkg_search_module(GLFW REQUIRED glfw3)
 include_directories(${GLFW_INCLUDE_DIRS})
 
