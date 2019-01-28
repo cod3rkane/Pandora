@@ -19,6 +19,7 @@ include_directories(${GLEW_INCLUDE_DIRS})
 
 set(SOURCE_FILES 
   src/Game.cpp
+  src/core/StbImage.h
 )
 
 add_executable(Pandora ${SOURCE_FILES})
