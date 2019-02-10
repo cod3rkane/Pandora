@@ -1,5 +1,5 @@
 #include <GL/glew.h>
-#include <GLFW/glfw3.h>
+#include <SDL2/SDL.h>
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -47,40 +47,51 @@ void checkCompileErrors(GLuint shader, std::string type) {
 }
 
 int main() {
-  if (!glfwInit()) {
-    std::cout << "ERROR: could not start GLFW3" << std::endl;
+  if (SDL_Init(SDL_INIT_EVERYTHING) > 0) {
+    std::cout << "ERROR: could not start SDL2" << std::endl;
 
-    return 1;
+    return -1;
   }
 
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
-  glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
+  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
+  SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 
-  GLFWwindow* window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Pandora", NULL, NULL);
+  SDL_Window* window = SDL_CreateWindow("Pandora", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_OPENGL |     SDL_WINDOW_SHOWN);
 
   if (!window) {
-    std::cout << "ERROR: could not open window with GLFW" << std::endl;
-    glfwTerminate();
+    std::cout << "ERROR: could not open window with SDL2" << SDL_GetError() << std::endl;
 
-    return 1;
+    return -1;
   }
 
-  glfwMakeContextCurrent(window);
+  SDL_GLContext context = SDL_GL_CreateContext(window);
+
+  if( context == NULL ) {
+    std::cout << "OpenGL context could not be created! SDL Error" << SDL_GetError() << std::endl;
+
+    return -1;
+  }
 
   // start glew
   glewExperimental = GL_TRUE;
   glewInit();
+
+  //Use Vsync
+  if( SDL_GL_SetSwapInterval( 1 ) < 0 ) {
+    std::cout << "Warning: Unable to set VSync! SDL Error:" << SDL_GetError() << std::endl;
+
+    return -1;
+  }
 
   // tell GLto only draw onto a pixel if the shape is closer to the view.
   // glEnable(GL_DEPTH_TEST);
   // glDepthFunc(GL_LESS);
 
   GLfloat vertices[] = {
-        // positions          // colors           // texture coords
-      0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f, // top right
-      0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f, // bottom right
+    // positions          // colors           // texture coords
+    0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f, // top right
+    0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f, // bottom right
     -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f, // bottom left
     -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f  // top left 
   };
@@ -169,7 +180,19 @@ int main() {
   glUseProgram(shaderProgram);
   glUniform1i(glGetUniformLocation(shaderProgram, "texture1"), 0);
 
-  while(!glfwWindowShouldClose(window)) {
+  bool quit = false;
+  SDL_Event sdlEvent;
+
+  //Enable text input
+  // SDL_StartTextInput();
+
+  while (!quit) {
+    while (SDL_PollEvent(&sdlEvent) != 0) {
+      if (sdlEvent.type == SDL_QUIT) {
+        quit = true;
+      }
+    }
+    
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     // wipe the drawing surface clear
     glClear(GL_COLOR_BUFFER_BIT);
@@ -184,8 +207,9 @@ int main() {
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     // glDrawArrays(GL_TRIANGLES, 0, 6);
 
-    glfwSwapBuffers(window); // put the stuff we've been drawing onto the display
-    glfwPollEvents();
+    //Unbind program
+		glUseProgram( NULL );
+    SDL_GL_SwapWindow(window);
   }
 
   // Delete Buffers
@@ -193,6 +217,8 @@ int main() {
   glDeleteBuffers(1, &VBO);
   glDeleteBuffers(1, &EBO);
 
-  glfwTerminate();
+  // SDL_StopTextInput();
+  SDL_DestroyWindow(window);
+  SDL_Quit();
   return 0;
 }
