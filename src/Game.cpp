@@ -94,12 +94,7 @@ int main() {
   // To do this we "generate" an empty buffer, set it as the current buffr in OpenGL's state machine by "binding"
   // Then copy the points into the currently bound buffer.
 
-  GLuint vbo = 0;
-  glGenBuffers(1, &vbo);
-  glBindBuffer(GL_ARRAY_BUFFER, vbo);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-  // Wehn we want to draw, all we do then is bind the VAO and draw.
+  // When we want to draw, all we do then is bind the VAO and draw.
   GLuint VAO, VBO, EBO;
   glGenVertexArrays(1, &VAO);
   glGenBuffers(1, &VBO);
