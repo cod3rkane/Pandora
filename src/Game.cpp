@@ -9,9 +9,6 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "core/StbImage.h"
 
-int WINDOW_WIDTH = 1280;
-int WINDOW_HEIGHT = 720;
-
 std::string loadFile(const GLchar* path) {
   std::ifstream stream(path, std::ios::binary);
   std::stringstream strStream;
@@ -49,6 +46,17 @@ void checkCompileErrors(GLuint shader, std::string type) {
 }
 
 int main() {
+  sol::state lua;
+  lua.open_libraries();
+
+  lua.script_file("src/scripts/window.lua");
+
+  std::string windowTitle = lua["window"]["title"];
+  int windowWidth = lua["window"]["width"];
+  int windowHeight = lua["window"]["height"];
+
+  // check lua script errors
+
   if (SDL_Init(SDL_INIT_EVERYTHING) > 0) {
     std::cout << "ERROR: could not start SDL2" << std::endl;
 
@@ -59,7 +67,7 @@ int main() {
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 
-  SDL_Window* window = SDL_CreateWindow("Pandora", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_OPENGL |     SDL_WINDOW_SHOWN);
+  SDL_Window* window = SDL_CreateWindow(windowTitle.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, windowWidth, windowHeight, SDL_WINDOW_OPENGL |     SDL_WINDOW_SHOWN);
 
   if (!window) {
     std::cout << "ERROR: could not open window with SDL2" << SDL_GetError() << std::endl;
