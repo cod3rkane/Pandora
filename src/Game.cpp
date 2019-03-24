@@ -4,6 +4,8 @@
 #include <string>
 #include <fstream>
 #include <sstream>
+#include <cassert>
+#include "core/sol.hpp"
 #define STB_IMAGE_IMPLEMENTATION
 #include "core/StbImage.h"
 
