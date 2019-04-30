@@ -13,6 +13,7 @@ ENDIF()
 set(SOURCE_FILES
 	src/main.cpp
   include/glad.c
+  src/util/registry.hpp
 )
 
 add_executable(Game ${SOURCE_FILES})
