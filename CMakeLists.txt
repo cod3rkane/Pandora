@@ -12,25 +12,9 @@ ENDIF()
 
 set(SOURCE_FILES
 	src/main.cpp
-    src/Game.h
-    src/Game.cpp
-    src/core/Window.h
-    src/core/StbImage.h
-    src/core/Texture.h
-    src/core/Texture.cpp
-    src/core/Object.h
-    src/core/Sprite.h
-    src/core/Sprite.cpp
-    src/core/Player.h
-    src/core/Player.cpp
-    src/core/Clock.h
-    src/core/TileMap.h
-    src/core/TileMap.cpp
-    src/core/Tile.h
-    src/core/Tile.cpp
 )
 
-add_executable(PuzzleGame ${SOURCE_FILES})
+add_executable(Game ${SOURCE_FILES})
 
 # Third Party libraries
 set(OpenGL_GL_PREFERENCE "GLVND") # preference to the new openGL
@@ -51,7 +35,7 @@ find_package(glm REQUIRED)
 include_directories(${GLM_INCLUDE_DIRS})
 add_definitions(${GLM_DEFINITIONS})
 
-target_link_libraries(PuzzleGame
+target_link_libraries(Game
     ${SDL2_LIBRARIES}
     ${OPENGL_LIBRARIES}
     ${GLEW_LIBRARIES}
