@@ -12,12 +12,21 @@ ENDIF()
 
 set(SOURCE_FILES
 	src/main.cpp
+  include/glad.c
 )
 
 add_executable(Game ${SOURCE_FILES})
 
 # Third Party libraries
 set(OpenGL_GL_PREFERENCE "GLVND") # preference to the new openGL
+
+target_include_directories(Game
+  PRIVATE
+  "${CMAKE_SOURCE_DIR}/include"
+  "${CMAKE_SOURCE_DIR}/src"
+  )
+
+find_package(PkgConfig REQUIRED)
 
 find_package(OpenGL REQUIRED)
 include_directories(${OPENGL_INCLUDE_DIR} ${OPENGL_INCLUDE_DIRS})
@@ -28,19 +37,20 @@ include_directories(${GLUT_INCLUDE_DIRS})
 find_package(GLEW REQUIRED)
 include_directories(${GLEW_INCLUDE_DIRS})
 
-find_package(SDL2 REQUIRED)
-include_directories(${SDL2_INCLUDE_DIRS})
+pkg_search_module(GLFW REQUIRED glfw3)
+include_directories(${GLFW_INCLUDE_DIRS})
 
 find_package(glm REQUIRED)
 include_directories(${GLM_INCLUDE_DIRS})
 add_definitions(${GLM_DEFINITIONS})
 
 target_link_libraries(Game
-    ${SDL2_LIBRARIES}
+    ${GLFW_LIBRARIES}
     ${OPENGL_LIBRARIES}
     ${GLEW_LIBRARIES}
     ${OPENGL_gl_LIBRARY}
     ${GLUT_LIBRARY}
     ${GLM_LIBRARY_DIRS}
+    -ldl
     )
 
