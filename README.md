@@ -6,3 +6,11 @@
  - You're far far away from your home Galaxy.
  - Isn't an easy job, we're not alone on the Universe!
 
+# Gameplay ideas
+ - Hovers
+ - Ships
+ - Satellites
+ - Robots (Miners, Explorer, Collector, Security, Trader)
+ - Trades with others civilizations/players
+ - Learn new things from others civilizations.
+ - Tech tree
