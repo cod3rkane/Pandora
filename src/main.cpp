@@ -14,7 +14,7 @@ int main(int, char *[]) {
   glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
   // Create a Window
-  GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Pandora", NULL, NULL);
+  GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "SEWR - Spatial Explorer Game With Resouces", NULL, NULL);
   glfwMakeContextCurrent(window);
 
   if (window == NULL) {
