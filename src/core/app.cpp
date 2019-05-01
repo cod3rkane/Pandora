@@ -3,6 +3,7 @@
 #include <iostream>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include "Game.hpp"
 
 namespace Core {
   void setupGLFW() {
@@ -41,14 +42,24 @@ namespace Core {
     GLFWwindow* window = createWindow();
     setupGL();
 
+    Core::Game game;
+    game.init();
+
     // Game Loop
     while (!glfwWindowShouldClose(window)) {
       // check if any events have been activated
       glfwPollEvents();
+      game.input();
+
+      if (!game.logic()) {
+        glfwSetWindowShouldClose(window, GLFW_TRUE);
+      }
 
       // render
       glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
       glClear(GL_COLOR_BUFFER_BIT);
+
+      game.render();
 
       // swap
       glfwSwapBuffers(window);
