@@ -16,6 +16,8 @@ set(SOURCE_FILES
   src/util/registry.hpp
   src/core/app.hpp
   src/core/app.cpp
+  src/core/Game.hpp
+  src/core/Game.cpp
 )
 
 add_executable(Game ${SOURCE_FILES})
