@@ -14,6 +14,8 @@ set(SOURCE_FILES
 	src/main.cpp
   include/glad.c
   src/util/registry.hpp
+  src/core/app.hpp
+  src/core/app.cpp
 )
 
 add_executable(Game ${SOURCE_FILES})
