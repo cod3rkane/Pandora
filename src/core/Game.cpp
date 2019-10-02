@@ -78,14 +78,12 @@ void Game::init() {
     glDeleteShader(fragmentShader);
 
     float vertices[] = {
-            0.5f,  0.5f, 0.0f,  // top right
-            0.5f, -0.5f, 0.0f,  // bottom right
-            -0.5f, -0.5f, 0.0f,  // bottom left
-            -0.5f,  0.5f, 0.0f   // top left
+            -0.5f, 0.5f, 0.0f,
+            0.5f, 0.5f, 0.0f,
+            0.0f, -0.5f, 0.0f
     };
     unsigned int indices[] = {
-            0, 1, 3,  // first Triangle
-            1, 2, 3   // second Triangle
+            0, 1, 2
     };
 
     glGenVertexArrays(1, &VAO);
@@ -128,7 +126,7 @@ void Game::start() {
 
     glUseProgram(shaderProgram);
     glBindVertexArray(VAO);
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+    glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
 }
 
 void Game::clean() {
