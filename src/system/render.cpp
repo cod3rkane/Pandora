@@ -14,7 +14,7 @@ void System::shader(Registry &reg) {
     for (const Entity e : view) {
         // Vertex
         const char* vertexShaderSource = view.get<Shader>(e).vertexShaderSource;
-        vertexShaderSource = getStringFromFile("../assets/shader/vertex.glsl").c_str();
+        vertexShaderSource = getStringFromFile(view.get<Shader>(e).filePathShader).c_str();
         int* vertexShader = &view.get<Shader>(e).vertexShader;
 
         *vertexShader = glCreateShader(GL_VERTEX_SHADER);
@@ -33,7 +33,7 @@ void System::shader(Registry &reg) {
 
         // Fragment
         const char* fragmentShaderSource = view.get<Shader>(e).fragmentShaderSource;
-        fragmentShaderSource = getStringFromFile("../assets/shader/fragment.glsl").c_str();
+        fragmentShaderSource = getStringFromFile(view.get<Shader>(e).filePathVertex).c_str();
         int* fragmentShader = &view.get<Shader>(e).fragmentShader;
 
         *fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
@@ -69,9 +69,10 @@ void System::shader(Registry &reg) {
 
         // @TODO: get vertices from some component
         float vertices[] = {
-                -0.5f, 0.5f, 0.0f,
-                0.5f, 0.5f, 0.0f,
-                0.0f, -0.5f, 0.0f
+                // positions         // colors
+                0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f,   // bottom right
+                -0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,   // bottom left
+                0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f    // top
         };
         // @TODO: get indices from some component
         unsigned int indices[] = {
@@ -95,8 +96,11 @@ void System::shader(Registry &reg) {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, *EBO);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr); // (void*)0 instead of nullptr
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
         glEnableVertexAttribArray(0);
+
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3* sizeof(float)));
+        glEnableVertexAttribArray(1);
 
         // note that this is allowed, the call to glVertexAttribPointer registered VBO as the vertex attribute's
         // bound vertex buffer object so afterwards we can safely unbind
