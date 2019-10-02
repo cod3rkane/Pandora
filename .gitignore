@@ -38,3 +38,5 @@ Makefile
 cmake_install.cmake
 .vscode/*
 Pandora
+cgame
+cmake-build-debug/

@@ -1,24 +1,18 @@
-cmake_minimum_required (VERSION 3.13)
-project(Pandora)
+cmake_minimum_required(VERSION 3.15)
+project(cgame)
+
+set(CMAKE_CXX_STANDARD 14)
 
 find_package(PkgConfig REQUIRED)
-# set(OpenGL_GL_PREFERENCE "GLVND") # to use new openGL version
-
 find_package(OpenGL REQUIRED)
-include_directories(${OPENGL_INCLUDE_DIR} ${OPENGL_INCLUDE_DIRS})
-
-find_package(GLUT REQUIRED)
-include_directories(${GLUT_INCLUDE_DIRS})
-
-pkg_search_module(GLFW REQUIRED glfw3)
-include_directories(${GLFW_INCLUDE_DIRS})
-
+find_package(glfw3 3.3 REQUIRED)
 find_package(GLEW REQUIRED)
+
+add_executable(cgame main.cpp src/core/Application.cpp src/core/Application.h)
+
+pkg_search_module(GLEW REQUIRED glew)
 include_directories(${GLEW_INCLUDE_DIRS})
 
-set(SOURCE_FILES 
-  src/Game.cpp
-)
-
-add_executable(Pandora ${SOURCE_FILES})
-target_link_libraries(Pandora ${GLFW_LIBRARIES} ${OPENGL_LIBRARIES} ${GLEW_LIBRARIES} ${OPENGL_gl_LIBRARY} ${GLUT_LIBRARY})
+include_directories(${OPENGL_INCLUDE_DIR} ${OPENGL_INCLUDE_DIRS})
+target_include_directories(cgame PUBLIC ${OPENGL_INCLUDE_DIR})
+target_link_libraries(cgame glfw ${GLEW_LIBRARIES} ${OPENGL_LIBRARIES} ${OPENGL_gl_LIBRARY})
