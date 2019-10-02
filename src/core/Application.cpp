@@ -24,7 +24,7 @@ void Application::update() {
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
-    window = glfwCreateWindow(1280, 720, title.c_str(), NULL, NULL);
+    window = glfwCreateWindow(windowWidth, windowHeight, title.c_str(), NULL, NULL);
 
     if (!window) {
         glfwTerminate();
@@ -47,8 +47,9 @@ void Application::start() {
     game.init();
 
     while (!glfwWindowShouldClose(window)) {
-        // get frame buffer size - GLFW
+        glfwGetFramebufferSize(window, &windowWidth, &windowHeight);
 
+        glViewport(0, 0, windowWidth, windowHeight);
         glClearColor(0.0f, 0.2f, 0.5f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
