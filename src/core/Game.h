@@ -10,10 +10,6 @@
 
 class Game {
     Registry reg;
-    unsigned int VBO;
-    unsigned int VAO;
-    unsigned int EBO;
-    int shaderProgram;
 public:
     Game();
     void init();
