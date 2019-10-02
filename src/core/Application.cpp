@@ -45,11 +45,17 @@ void Application::update() {
 }
 
 void Application::start() {
+    game.init();
+
     while (!glfwWindowShouldClose(window)) {
         // get frame buffer size - GLFW
 
         glClearColor(0.0f, 0.2f, 0.5f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
+
+        game.update();
+
+        game.start();
 
         glfwSwapBuffers(window);
         glfwPollEvents();

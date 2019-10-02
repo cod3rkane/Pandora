@@ -9,10 +9,12 @@
 #include <GLFW/glfw3.h>
 #include <cstdlib>
 #include <iostream>
+#include "Game.h"
 
 class Application {
     GLFWwindow* window = nullptr;
     std::string title = "Pandora Project - Alpha 0.0.1";
+    Game game;
 
 public:
     Application();
