@@ -14,6 +14,7 @@ pkg_search_module(GLEW REQUIRED glew)
 include_directories(${GLEW_INCLUDE_DIRS})
 
 include_directories(external/entt/include)
+include_directories(external/glm/include)
 
 include_directories(${OPENGL_INCLUDE_DIR} ${OPENGL_INCLUDE_DIRS})
 target_include_directories(cgame PUBLIC ${OPENGL_INCLUDE_DIR})
