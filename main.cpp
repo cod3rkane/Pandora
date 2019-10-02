@@ -2,7 +2,6 @@
 #include "src/core/Application.h"
 
 int main() {
-    std::cout << "Hello, cgame" << std::endl;
     Application application;
 
     application.init();
