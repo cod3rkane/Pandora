@@ -10,6 +10,7 @@
 namespace System {
     void shader(Registry &reg);
     void render(Registry &reg);
+    void cleanRender(Registry &reg);
 }
 
 #endif //CGAME_RENDER_H

@@ -39,8 +39,5 @@ void Game::start() {
 }
 
 void Game::clean() {
-    // add System to Clean things up
-//    glDeleteVertexArrays(1, &VAO);
-//    glDeleteBuffers(1, &VBO);
-//    glDeleteBuffers(1, &EBO);
+    System::cleanRender(reg);
 }

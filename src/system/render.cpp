@@ -119,3 +119,12 @@ void System::render(Registry &reg) {
         glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
     }
 }
+
+void System::cleanRender(Registry &reg) {
+    const auto view = reg.view<Shader, Renderable>();
+    for (const Entity e : view) {
+        glDeleteVertexArrays(1, &view.get<Renderable>(e).VAO);
+        glDeleteBuffers(1, &view.get<Renderable>(e).VBO);
+        glDeleteBuffers(1, &view.get<Renderable>(e).EBO);
+    }
+}
