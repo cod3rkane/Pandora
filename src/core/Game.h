@@ -19,6 +19,7 @@ public:
     void init();
     void update();
     void start();
+    void clean();
     ~Game();
 };
 

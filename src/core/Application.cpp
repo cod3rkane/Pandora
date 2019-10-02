@@ -61,6 +61,8 @@ void Application::start() {
         glfwPollEvents();
     }
 
+    game.clean();
+
     glfwDestroyWindow(window);
     glfwTerminate();
     exit(EXIT_SUCCESS);
