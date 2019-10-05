@@ -7,6 +7,7 @@
 
 #include <fstream>
 #include <sstream>
+#include <iostream>
 
 std::string getStringFromFile(const char* filePath);
 

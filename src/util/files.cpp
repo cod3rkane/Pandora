@@ -11,5 +11,7 @@ std::string getStringFromFile(const char* filePath) {
 
     fStream.close();
 
-    return std::string(sStream.str());
+    const std::basic_string bString = sStream.str();
+
+    return bString;
 }
