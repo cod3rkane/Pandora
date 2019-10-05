@@ -8,13 +8,16 @@
 #include "../components/Shader.h"
 #include "../components/Render.h"
 #include "../util/files.h"
+#define STB_IMAGE_IMPLEMENTATION
+#include "../util/stb_image.h"
 
 void System::shader(Registry &reg) {
     const auto view = reg.view<Shader, Renderable>();
     for (const Entity e : view) {
         // Vertex
+        std::string vertexStr = getStringFromFile(view.get<Shader>(e).filePathShader);
         const char* vertexShaderSource = view.get<Shader>(e).vertexShaderSource;
-        vertexShaderSource = getStringFromFile(view.get<Shader>(e).filePathShader).c_str();
+        vertexShaderSource = vertexStr.c_str();
         int* vertexShader = &view.get<Shader>(e).vertexShader;
 
         *vertexShader = glCreateShader(GL_VERTEX_SHADER);
@@ -32,8 +35,9 @@ void System::shader(Registry &reg) {
         }
 
         // Fragment
+        std::string fragmentStr = getStringFromFile(view.get<Shader>(e).filePathVertex);
         const char* fragmentShaderSource = view.get<Shader>(e).fragmentShaderSource;
-        fragmentShaderSource = getStringFromFile(view.get<Shader>(e).filePathVertex).c_str();
+        fragmentShaderSource = fragmentStr.c_str();
         int* fragmentShader = &view.get<Shader>(e).fragmentShader;
 
         *fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
@@ -69,11 +73,11 @@ void System::shader(Registry &reg) {
 
         // @TODO: get vertices from some component
         float vertices[] = {
-                // positions         // colors
-                0.5f,  0.5f, 0.0f,  1.0f, 0.0f, 0.0f,
-                0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,
-                -0.5f, -0.5f, 0.0f,  0.0f, 0.0f, 1.0f,
-                -0.5f,  0.5f, 0.0f,  1.0f, 0.5f, 0.0f
+                // positions          // colors           // texture coords
+                0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f, // top right
+                0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f, // bottom right
+                -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f, // bottom left
+                -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f  // top left
         };
         // @TODO: get indices from some component
         unsigned int indices[] = {
@@ -98,11 +102,44 @@ void System::shader(Registry &reg) {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, *EBO);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
         glEnableVertexAttribArray(0);
 
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3* sizeof(float)));
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3* sizeof(float)));
         glEnableVertexAttribArray(1);
+
+        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6* sizeof(float)));
+        glEnableVertexAttribArray(2);
+
+        // texture
+        const char* texturePath = view.get<Shader>(e).texturePath;
+        if (texturePath != NULL) {
+            unsigned int* texture = &view.get<Shader>(e).texture;
+            glGenTextures(1, texture);
+            glBindTexture(GL_TEXTURE_2D, *texture);
+
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+            int width, height, nrChannels;
+            stbi_set_flip_vertically_on_load(true); // tell stb_image.h to flip loaded texture's on the y-axis.
+            unsigned char* data = stbi_load(texturePath, &width, &height, &nrChannels, 0);
+
+            if (data) {
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+                glGenerateMipmap(GL_TEXTURE_2D);
+            } else {
+                std::cout << "Failed to load texture" << std::endl;
+            }
+
+            stbi_image_free(data);
+
+            glUseProgram(*shaderProgram);
+            glUniform1i(glGetUniformLocation(*shaderProgram, "texture1"), 0);
+        }
 
         // note that this is allowed, the call to glVertexAttribPointer registered VBO as the vertex attribute's
         // bound vertex buffer object so afterwards we can safely unbind
@@ -120,9 +157,17 @@ void System::shader(Registry &reg) {
 void System::render(Registry &reg) {
     const auto view = reg.view<Shader, Renderable>();
     for (const Entity e : view) {
+        const char* texturePath = view.get<Shader>(e).texturePath;
+        if (texturePath != NULL) {
+            unsigned int* texture = &view.get<Shader>(e).texture;
+            glActiveTexture(GL_TEXTURE0);
+            glBindTexture(GL_TEXTURE_2D, *texture);
+        }
+
         glUseProgram(view.get<Shader>(e).shaderProgram);
         glBindVertexArray(view.get<Renderable>(e).VAO);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        glBindVertexArray(0);
     }
 }
 

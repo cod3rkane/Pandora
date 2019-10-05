@@ -19,7 +19,7 @@ void Game::init() {
     // init entities
     const Entity e = reg.create();
 
-    reg.assign<Shader>(e, "../assets/shader/vertex.glsl", "../assets/shader/fragment.glsl");
+    reg.assign<Shader>(e, "../assets/shader/vertex-texture2d.glsl", "../assets/shader/fragment-texture2d.glsl", "../assets/textures/wall.jpg");
     reg.assign<Renderable>(e);
 
     System::shader(reg);
