@@ -22,7 +22,28 @@ void Game::init() {
     // init entities
     const Entity e = reg.create();
 
-    reg.assign<Shader>(e, "../assets/shader/vertex-texture2d.glsl", "../assets/shader/fragment-texture2d.glsl", "../assets/textures/wall.jpg");
+    float vertices[] = {
+        // positions          // colors           // texture coords
+        0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f,   // top right
+        0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,  // bottom right
+        -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
+        -0.5f, 0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f   // top left
+    };
+    unsigned int indices[] = {
+        0, 1, 3, // first triangle
+        1, 2, 3  // second triangle
+    };
+
+    reg.assign<Shader>(
+        e,
+        "../assets/shader/vertex-texture2d.glsl",
+        "../assets/shader/fragment-texture2d.glsl",
+        "../assets/textures/wall.jpg",
+        vertices,
+        sizeof(vertices),
+        indices,
+        sizeof(indices)
+    );
     reg.assign<Transform>(
         e,
         glm::vec3(0.0f, 0.0f, -3.0f),

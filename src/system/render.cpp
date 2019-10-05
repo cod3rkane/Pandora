@@ -71,18 +71,16 @@ void System::shader(Registry &reg) {
         glDeleteShader(*vertexShader);
         glDeleteShader(*fragmentShader);
 
-        // @TODO: get vertices from some component
         float vertices[] = {
-                // positions          // colors           // texture coords
-                0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f, // top right
-                0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f, // bottom right
-                -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f, // bottom left
-                -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f  // top left
+            // positions          // colors           // texture coords
+            0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f,   // top right
+            0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,  // bottom right
+            -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
+            -0.5f, 0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f   // top left
         };
-        // @TODO: get indices from some component
         unsigned int indices[] = {
-                0, 1, 3, // first triangle
-                1, 2, 3  // second triangle
+            0, 1, 3, // first triangle
+            1, 2, 3  // second triangle
         };
 
         unsigned int* VAO = &view.get<Renderable>(e).VAO;
@@ -97,10 +95,10 @@ void System::shader(Registry &reg) {
         glBindVertexArray(*VAO);
 
         glBindBuffer(GL_ARRAY_BUFFER, *VBO);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, view.get<Shader>(e).verticesSize, view.get<Shader>(e).vertices, GL_STATIC_DRAW);
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, *EBO);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, view.get<Shader>(e).indicesSize, view.get<Shader>(e).indices, GL_STATIC_DRAW);
 
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
         glEnableVertexAttribArray(0);
