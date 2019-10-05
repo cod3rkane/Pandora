@@ -20,8 +20,6 @@ Game::~Game() {
 
 void Game::init() {
     // init entities
-    const Entity e = reg.create();
-
     float vertices[] = {
         // positions          // colors           // texture coords
         0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f,   // top right
@@ -34,6 +32,7 @@ void Game::init() {
         1, 2, 3  // second triangle
     };
 
+    const Entity e = reg.create();
     reg.assign<Shader>(
         e,
         "../assets/shader/vertex-texture2d.glsl",
@@ -53,6 +52,27 @@ void Game::init() {
         glm::vec3(1.0f, 1.0f, 1.0f)
     );
     reg.assign<Renderable>(e);
+
+    const Entity e2 = reg.create();
+    reg.assign<Shader>(
+        e2,
+        "../assets/shader/vertex-texture2d.glsl",
+        "../assets/shader/fragment-texture2d.glsl",
+        "../assets/textures/wall.jpg",
+        vertices,
+        sizeof(vertices),
+        indices,
+        sizeof(indices)
+    );
+    reg.assign<Transform>(
+        e2,
+        glm::vec3(1.2f, 0.0f, -3.0f),
+        100,
+        100,
+        glm::vec3(0.0f, 1.0f, 0.0f),
+        glm::vec3(1.0f, 1.0f, 1.0f)
+    );
+    reg.assign<Renderable>(e2);
 
     System::shader(reg);
 }
