@@ -8,11 +8,13 @@
 struct Shader {
     const char* filePathShader;
     const char* filePathVertex;
+    const char* texturePath;
     const char* vertexShaderSource;
     int vertexShader;
     const char* fragmentShaderSource;
     int fragmentShader;
     int shaderProgram;
+    unsigned int texture;
 };
 
 #endif //CGAME_SHADER_H
