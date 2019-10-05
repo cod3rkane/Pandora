@@ -9,7 +9,7 @@
 #include "../components/Shader.h"
 #include "../components/Transform.h"
 
-void System::transformations(Registry &reg) {
+void System::transformations(Registry &reg, int windowWidth, int windowHeight) {
     const auto view = reg.view<Shader, Transform>();
 
     for (const Entity e : view) {
@@ -20,7 +20,7 @@ void System::transformations(Registry &reg) {
 
         float angle = 0.0f;
 
-        projection = glm::perspective(glm::radians(45.0f), (float)1280 / 720, 0.1f, 100.0f);
+        projection = glm::perspective(glm::radians(45.0f), (float)windowWidth / windowHeight, 0.1f, 100.0f);
         viewTransformation = glm::translate(viewTransformation, view.get<Transform>(e).position);
         model = glm::scale(model, view.get<Transform>(e).scale);
         model = glm::rotate(model, glm::radians(angle), view.get<Transform>(e).rotation);

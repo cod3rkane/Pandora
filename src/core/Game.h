@@ -13,7 +13,7 @@ class Game {
 public:
     Game();
     void init();
-    void update();
+    void update(int windowWidth, int windowHeight);
     void start();
     void clean();
     ~Game();

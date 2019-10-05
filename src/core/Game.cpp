@@ -36,16 +36,16 @@ void Game::init() {
     System::shader(reg);
 }
 
-void Game::update() {
+void Game::update(int windowWidth, int windowHeight) {
     // get inputs
     // create world
+    System::transformations(reg, windowWidth, windowHeight);
 }
 
 void Game::start() {
     // game loop
     // render things
     // Load Systems
-    System::transformations(reg);
     System::render(reg);
 }
 

@@ -8,7 +8,7 @@
 #include "../util/registry.h"
 
 namespace System {
-  void transformations(Registry &reg);
+  void transformations(Registry &reg, int windowWidth, int windowHeight);
 }
 
 

@@ -53,7 +53,7 @@ void Application::start() {
         glClearColor(0.0f, 0.2f, 0.5f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        game.update();
+        game.update(windowWidth, windowHeight);
 
         game.start();
 
