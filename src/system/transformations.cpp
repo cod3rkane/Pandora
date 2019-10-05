@@ -17,8 +17,13 @@ void System::transformations(Registry &reg) {
         glm::mat4 viewTransformation = glm::mat4(1.0f);
         glm::mat4 projection = glm::mat4(1.0f);
         glm::mat4 model = glm::mat4(1.0f);
+
+        float angle = 0.0f;
+
         projection = glm::perspective(glm::radians(45.0f), (float)1280 / 720, 0.1f, 100.0f);
-        viewTransformation = glm::translate(viewTransformation, glm::vec3(0.0f, 0.0f, -3.0f));
+        viewTransformation = glm::translate(viewTransformation, view.get<Transform>(e).position);
+        model = glm::scale(model, view.get<Transform>(e).scale);
+        model = glm::rotate(model, glm::radians(angle), view.get<Transform>(e).rotation);
 
         glUseProgram(view.get<Shader>(e).shaderProgram);
 

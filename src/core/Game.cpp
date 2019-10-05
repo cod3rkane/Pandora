@@ -28,7 +28,7 @@ void Game::init() {
         glm::vec3(0.0f, 0.0f, -3.0f),
         100,
         100,
-        glm::vec3(0.0f, 0.0f, 0.0f),
+        glm::vec3(0.0f, 1.0f, 0.0f),
         glm::vec3(1.0f, 1.0f, 1.0f)
     );
     reg.assign<Renderable>(e);

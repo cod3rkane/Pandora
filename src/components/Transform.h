@@ -12,7 +12,7 @@ struct Transform {
     int width;
     int height;
     glm::vec3 rotation;
-    glm::vec3 scale;;
+    glm::vec3 scale;
 };
 
 #endif //CGAME_TRANSFORM_H
