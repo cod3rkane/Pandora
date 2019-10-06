@@ -9,11 +9,9 @@
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
 #include "../util/registry.h"
-#include "../util/Camera.h"
 
 class Game {
     Registry reg;
-    Camera playerCamera = Camera(glm::vec3(0.0f, 0.0f, 3.0f));
 public:
     Game();
     void init();

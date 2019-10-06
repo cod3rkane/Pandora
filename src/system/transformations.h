@@ -9,7 +9,7 @@
 #include <glm/glm.hpp>
 
 namespace System {
-  void transformations(Registry &reg, int windowWidth, int windowHeight, glm::mat4 cameraView);
+  void transformations(Registry &reg, int windowWidth, int windowHeight);
 }
 
 

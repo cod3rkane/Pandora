@@ -4,14 +4,17 @@
 
 #include "Game.h"
 #include <GLFW/glfw3.h>
+#include <entt/entt.hpp>
 #include "../system/render.h"
 #include "../system/transformations.h"
 #include "../components/Shader.h"
 #include "../components/Render.h"
 #include "../components/Transform.h"
+#include "../util/Camera.h"
 
 Game::Game() {
-
+    Camera playerCamera(glm::vec3(0.0f, 0.0f, 3.0f));
+    entt::service_locator<Camera>::set(playerCamera);
 }
 
 Game::~Game() {
@@ -114,9 +117,10 @@ void Game::update(float deltaTime, int windowWidth, int windowHeight) {
     // get inputs
     // create world
 
-    playerCamera.Position += playerCamera.Front * 2.5f * deltaTime;
+    Camera* camera = &entt::service_locator<Camera>::ref();
+    camera->Position += camera->Front * 2.5f * deltaTime;
 
-    System::transformations(reg, windowWidth, windowHeight, playerCamera.getViewMatrix());
+    System::transformations(reg, windowWidth, windowHeight);
 }
 
 void Game::start() {
