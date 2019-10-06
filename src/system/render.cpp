@@ -111,7 +111,7 @@ void System::shader(Registry &reg) {
 
         // texture
         const char* texturePath = view.get<Shader>(e).texturePath;
-        if (texturePath != NULL) {
+        if (texturePath != nullptr) {
             unsigned int* texture = &view.get<Shader>(e).texture;
             glGenTextures(1, texture);
             glBindTexture(GL_TEXTURE_2D, *texture);
@@ -156,7 +156,7 @@ void System::render(Registry &reg) {
     const auto view = reg.view<Shader, Renderable>();
     for (const Entity e : view) {
         const char* texturePath = view.get<Shader>(e).texturePath;
-        if (texturePath != NULL) {
+        if (texturePath != nullptr) {
             unsigned int* texture = &view.get<Shader>(e).texture;
             glActiveTexture(GL_TEXTURE0);
             glBindTexture(GL_TEXTURE_2D, *texture);
@@ -164,8 +164,11 @@ void System::render(Registry &reg) {
 
         glUseProgram(view.get<Shader>(e).shaderProgram);
         glBindVertexArray(view.get<Renderable>(e).VAO);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        int size;
+        glGetBufferParameteriv(GL_ELEMENT_ARRAY_BUFFER, GL_BUFFER_SIZE, &size);
+        glDrawElements(GL_TRIANGLES, size / sizeof(GLushort), GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 }
 
