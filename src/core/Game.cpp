@@ -35,9 +35,9 @@ void Game::init() {
     const Entity e = reg.create();
     reg.assign<Shader>(
         e,
-        "../assets/shader/vertex-texture2d.glsl",
-        "../assets/shader/fragment-texture2d.glsl",
-        "../assets/textures/wall.jpg",
+        "assets/shader/vertex-texture2d.glsl",
+        "assets/shader/fragment-texture2d.glsl",
+        "assets/textures/wall.jpg",
         vertices,
         sizeof(vertices),
         indices,
@@ -56,9 +56,9 @@ void Game::init() {
     const Entity e2 = reg.create();
     reg.assign<Shader>(
         e2,
-        "../assets/shader/vertex-texture2d.glsl",
-        "../assets/shader/fragment-texture2d.glsl",
-        "../assets/textures/wall.jpg",
+        "assets/shader/vertex-texture2d.glsl",
+        "assets/shader/fragment-texture2d.glsl",
+        "assets/textures/vegetta.jpg",
         vertices,
         sizeof(vertices),
         indices,
@@ -66,7 +66,7 @@ void Game::init() {
     );
     reg.assign<Transform>(
         e2,
-        glm::vec3(1.2f, 0.0f, -3.0f),
+        glm::vec3(1.0f, 1.0f, -3.0f),
         100,
         100,
         glm::vec3(0.0f, 1.0f, 0.0f),
