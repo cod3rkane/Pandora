@@ -17,6 +17,8 @@ class Application {
     Game game;
     int windowWidth = 1280;
     int windowHeight = 720;
+    float deltaTime = 0.0f; // time between current frame and last frame
+    float lastFrame = 0.0f;
 public:
     Application();
     void init();

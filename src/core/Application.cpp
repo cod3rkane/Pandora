@@ -47,6 +47,11 @@ void Application::start() {
     game.init();
 
     while (!glfwWindowShouldClose(window)) {
+        // per-frame time lofic
+        float currentFrame = glfwGetTime();
+        deltaTime = currentFrame - lastFrame;
+        lastFrame = currentFrame;
+
         glfwGetFramebufferSize(window, &windowWidth, &windowHeight);
 
         glMatrixMode(GL_PROJECTION);
@@ -57,7 +62,7 @@ void Application::start() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         // glEnable(GL_DEPTH_TEST);
 
-        game.update(windowWidth, windowHeight);
+        game.update(deltaTime, windowWidth, windowHeight);
 
         game.start();
 

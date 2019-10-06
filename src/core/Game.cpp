@@ -3,7 +3,7 @@
 //
 
 #include "Game.h"
-#include <glm/glm.hpp>
+#include <GLFW/glfw3.h>
 #include "../system/render.h"
 #include "../system/transformations.h"
 #include "../components/Shader.h"
@@ -110,10 +110,13 @@ void Game::init() {
     System::shader(reg);
 }
 
-void Game::update(int windowWidth, int windowHeight) {
+void Game::update(float deltaTime, int windowWidth, int windowHeight) {
     // get inputs
     // create world
-    System::transformations(reg, windowWidth, windowHeight);
+
+    playerCamera.Position += playerCamera.Front * 2.5f * deltaTime;
+
+    System::transformations(reg, windowWidth, windowHeight, playerCamera.getViewMatrix());
 }
 
 void Game::start() {
