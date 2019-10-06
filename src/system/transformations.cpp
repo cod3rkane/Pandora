@@ -9,7 +9,7 @@
 #include "../components/Shader.h"
 #include "../components/Transform.h"
 
-void System::transformations(Registry &reg, int windowWidth, int windowHeight) {
+void System::transformations(Registry &reg, int windowWidth, int windowHeight, glm::mat4 cameraView) {
     const auto view = reg.view<Shader, Transform>();
 
     for (const Entity e : view) {
@@ -30,7 +30,7 @@ void System::transformations(Registry &reg, int windowWidth, int windowHeight) {
         glUseProgram(view.get<Shader>(e).shaderProgram);
 
         glUniformMatrix4fv(glGetUniformLocation(view.get<Shader>(e).shaderProgram, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-        glUniformMatrix4fv(glGetUniformLocation(view.get<Shader>(e).shaderProgram, "view"), 1, GL_FALSE, glm::value_ptr(viewTransformation));
+        glUniformMatrix4fv(glGetUniformLocation(view.get<Shader>(e).shaderProgram, "view"), 1, GL_FALSE, glm::value_ptr(cameraView));
         glUniformMatrix4fv(glGetUniformLocation(view.get<Shader>(e).shaderProgram, "model"), 1, GL_FALSE, glm::value_ptr(model));
     }
 }
