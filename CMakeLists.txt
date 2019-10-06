@@ -16,6 +16,6 @@ include_directories(${GLEW_INCLUDE_DIRS})
 include_directories(external/entt/include)
 include_directories(external/glm/include)
 
-include_directories(${OPENGL_INCLUDE_DIR} ${OPENGL_INCLUDE_DIRS})
+include_directories(${OPENGL_INCLUDE_DIR} ${GLEW_INCLUDE_DIRS} ${OPENGL_INCLUDE_DIRS})
 target_include_directories(cgame PUBLIC ${OPENGL_INCLUDE_DIR})
 target_link_libraries(cgame glfw ${GLEW_LIBRARIES} ${OPENGL_LIBRARIES} ${OPENGL_gl_LIBRARY})
