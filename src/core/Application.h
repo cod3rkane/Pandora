@@ -9,6 +9,7 @@
 #include <GLFW/glfw3.h>
 #include <cstdlib>
 #include <iostream>
+
 #include "Game.h"
 
 class Application {

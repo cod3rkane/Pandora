@@ -3,7 +3,9 @@
 //
 
 #include "Game.h"
+
 #include <entt/entt.hpp>
+
 #include "../system/render.h"
 #include "../system/transformations.h"
 #include "../system/interactions.h"
