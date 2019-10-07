@@ -3,10 +3,10 @@
 //
 
 #include "Game.h"
-#include <GLFW/glfw3.h>
 #include <entt/entt.hpp>
 #include "../system/render.h"
 #include "../system/transformations.h"
+#include "../system/interactions.h"
 #include "../components/Shader.h"
 #include "../components/Render.h"
 #include "../components/Transform.h"
@@ -21,7 +21,8 @@ Game::~Game() {
 
 }
 
-void Game::init() {
+void Game::init(GLFWwindow* window) {
+    window = window;
     // init entities
     float vertices[] = {
         // positions          // colors           // texture coords
@@ -117,9 +118,7 @@ void Game::update(float deltaTime, int windowWidth, int windowHeight) {
     // get inputs
     // create world
 
-    Camera* camera = &entt::service_locator<Camera>::ref();
-    camera->Position += camera->Front * 2.5f * deltaTime;
-
+    System::userInputs(reg, deltaTime);
     System::transformations(reg, windowWidth, windowHeight);
 }
 
