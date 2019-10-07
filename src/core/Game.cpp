@@ -23,8 +23,8 @@ Game::~Game() {
 
 }
 
-void Game::init(GLFWwindow* window) {
-    window = window;
+void Game::init(GLFWwindow* mainWindow) {
+    window = mainWindow;
     // init entities
     float vertices[] = {
         // positions          // colors           // texture coords
@@ -120,7 +120,7 @@ void Game::update(float deltaTime, int windowWidth, int windowHeight) {
     // get inputs
     // create world
 
-    System::userInputs(reg, deltaTime);
+    System::userInputs(reg, window, deltaTime);
     System::transformations(reg, windowWidth, windowHeight);
 }
 
