@@ -6,6 +6,10 @@
 
 #include "../util/Camera.h"
 
+bool firstMouse = true;
+double lastMouseX;
+double lastMouseY;
+
 void System::userInputs(Registry &reg, GLFWwindow* mainWindow, float deltaTime) {
     if (glfwGetKey(mainWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
         // @TODO: change this...
@@ -26,5 +30,24 @@ void System::userInputs(Registry &reg, GLFWwindow* mainWindow, float deltaTime) 
     }
     if (glfwGetKey(mainWindow, GLFW_KEY_D) == GLFW_PRESS) {
         camera->Position += glm::normalize(glm::cross(camera->Front, camera->Up)) * cameraSpeed;
+    }
+
+    double mouseX, mouseY;
+    glfwGetCursorPos(mainWindow, &mouseX, &mouseY);
+    int mouseLeftBtn = glfwGetMouseButton(mainWindow, GLFW_MOUSE_BUTTON_LEFT);
+    if (mouseLeftBtn == GLFW_PRESS) {
+        if (firstMouse) {
+            lastMouseX = mouseX;
+            lastMouseY = mouseY;
+            firstMouse = false;
+        }
+
+        float xoffset = mouseX - lastMouseX;
+        float yoffset = lastMouseY - mouseY;
+
+        lastMouseX = mouseX;
+        lastMouseY = mouseY;
+
+        camera->mouseMovement(xoffset, yoffset);
     }
 }

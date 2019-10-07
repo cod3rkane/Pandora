@@ -23,6 +23,26 @@ void Camera::updateVectors() {
     Up = glm::normalize(glm::cross(Right, Front));
 }
 
+void Camera::mouseMovement(float xoffset, float yoffset, bool constrainPitch) {
+    xoffset *= SENSITIVITY;
+    yoffset *= SENSITIVITY;
+
+    yaw += xoffset;
+    pitch += yoffset;
+
+    if (constrainPitch) {
+        // make sure that when pitch is out of bounds, screen doesn't get flipped
+        if (pitch > 89.0f) {
+            pitch = 89.0f;
+        }
+        if (pitch < -89.0f) {
+            pitch = -89.0f;
+        }
+    }
+
+    updateVectors();
+}
+
 glm::mat4 Camera::getViewMatrix() {
     return glm::lookAt(Position, Position + Front, Up);
 }
