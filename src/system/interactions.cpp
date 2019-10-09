@@ -44,10 +44,9 @@ void System::userInputs(Registry &reg, GLFWwindow* mainWindow, float deltaTime) 
 
         float xoffset = mouseX - lastMouseX;
         float yoffset = lastMouseY - mouseY;
-
-        lastMouseX = mouseX;
-        lastMouseY = mouseY;
-
         camera->mouseMovement(xoffset, yoffset);
     }
+
+    lastMouseX = mouseX;
+    lastMouseY = mouseY;
 }
