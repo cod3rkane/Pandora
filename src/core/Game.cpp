@@ -25,54 +25,18 @@ Game::~Game() {
 
 void Game::init(GLFWwindow* mainWindow) {
     window = mainWindow;
-    // init entities
-    float vertices[] = {
-        // positions          // colors           // texture coords
-        0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f,   // top right
-        0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,  // bottom right
-        -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
-        -0.5f, 0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f   // top left
-    };
-    unsigned int indices[] = {
-        0, 1, 3, // first triangle
-        1, 2, 3  // second triangle
-    };
 
-    const Entity e = reg.create();
-    reg.assign<Shader>(
-        e,
-        "assets/shader/vertex-texture2d.glsl",
-        "assets/shader/fragment-texture2d.glsl",
-        "assets/textures/wall.jpg",
-        vertices,
-        sizeof(vertices),
-        indices,
-        sizeof(indices)
-    );
-    reg.assign<Transform>(
-        e,
-        glm::vec3(0.0f, 0.0f, -3.0f),
-        100,
-        100,
-        glm::vec3(0.0f, 1.0f, 0.0f),
-        glm::vec3(1.0f, 1.0f, 1.0f)
-    );
-    reg.assign<Renderable>(e);
-
-    float verticesCube[] = {
-        // front
-        -1.0f, -1.0f,  1.0f,   1.0f, 0.0f, 0.0f,    1.0f, 1.0f,
-        1.0f, -1.0f,  1.0f,    1.0f, 0.0f, 0.0f,    1.0f, 1.0f,
-        1.0f,  1.0f,  1.0f,    1.0f, 0.0f, 0.0f,    1.0f, 1.0f,
-        -1.0f,  1.0f,  1.0f,   1.0f, 0.0f, 0.0f,    1.0f, 1.0f,
-        // back
-        -1.0f, -1.0f, -1.0f,   1.0f, 0.0f, 0.0f,    1.0f, 1.0f,
-        1.0f, -1.0f, -1.0f,    1.0f, 0.0f, 0.0f,    1.0f, 1.0f,
-        1.0f,  1.0f, -1.0f,    1.0f, 0.0f, 0.0f,    1.0f, 1.0f,
-        -1.0f,  1.0f, -1.0f,    1.0f, 0.0f, 0.0f,   1.0f, 1.0f
-    };
-    unsigned int indicesCube[] = {
-        // front
+    Vertex v0 = {glm::vec3(-1.0f, -1.0f,  1.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(1.0f, 1.0f)};
+    Vertex v1 = {glm::vec3(1.0f, -1.0f,  1.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(1.0f, 1.0f)};
+    Vertex v2 = {glm::vec3(1.0f,  1.0f,  1.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(1.0f, 1.0f)};
+    Vertex v3 = {glm::vec3(-1.0f,  1.0f,  1.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(1.0f, 1.0f)};
+    Vertex v4 = {glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(1.0f, 1.0f)};
+    Vertex v5 = {glm::vec3(1.0f, -1.0f, -1.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(1.0f, 1.0f)};
+    Vertex v6 = {glm::vec3(1.0f,  1.0f, -1.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(1.0f, 1.0f)};
+    Vertex v7 = {glm::vec3(-1.0f,  1.0f, -1.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec2(1.0f, 1.0f)};
+    std::vector<Vertex> vertices = { v0, v1, v2, v3, v4, v5, v6, v7 };
+    std::vector<unsigned int> indices = {
+         // front
 		0, 1, 2,
 		2, 3, 0,
 		// right
@@ -91,17 +55,19 @@ void Game::init(GLFWwindow* mainWindow) {
 		3, 2, 6,
 		6, 7, 3
     };
+    std::vector<Texture> textures;
 
     const Entity e2 = reg.create();
     reg.assign<Shader>(
         e2,
         "assets/shader/vertex-texture2d.glsl",
-        "assets/shader/fragment-texture2d.glsl",
-        nullptr,
-        verticesCube,
-        sizeof(verticesCube),
-        indicesCube,
-        sizeof(indicesCube)
+        "assets/shader/fragment-texture2d.glsl"
+    );
+    reg.assign<Renderable>(e2);
+    reg.assign<Mesh>(
+        e2,
+        vertices,
+        indices
     );
     reg.assign<Transform>(
         e2,
@@ -111,9 +77,9 @@ void Game::init(GLFWwindow* mainWindow) {
         glm::vec3(0.0f, 1.0f, 0.0f),
         glm::vec3(0.2f, 0.2f, 0.2f)
     );
-    reg.assign<Renderable>(e2);
 
     System::shader(reg);
+    System::preRender(reg);
 }
 
 void Game::update(float deltaTime, int windowWidth, int windowHeight) {
