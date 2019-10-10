@@ -31,10 +31,10 @@ void System::transformations(Registry &reg, int windowWidth, int windowHeight) {
         model = glm::rotate(model, glm::radians(rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
         model = glm::scale(model, view.get<Transform>(e).scale);
 
-        glUseProgram(view.get<Shader>(e).shaderProgram);
+        glUseProgram(view.get<Shader>(e).program);
 
-        glUniformMatrix4fv(glGetUniformLocation(view.get<Shader>(e).shaderProgram, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-        glUniformMatrix4fv(glGetUniformLocation(view.get<Shader>(e).shaderProgram, "view"), 1, GL_FALSE, glm::value_ptr(camera.getViewMatrix()));
-        glUniformMatrix4fv(glGetUniformLocation(view.get<Shader>(e).shaderProgram, "model"), 1, GL_FALSE, glm::value_ptr(model));
+        glUniformMatrix4fv(glGetUniformLocation(view.get<Shader>(e).program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+        glUniformMatrix4fv(glGetUniformLocation(view.get<Shader>(e).program, "view"), 1, GL_FALSE, glm::value_ptr(camera.getViewMatrix()));
+        glUniformMatrix4fv(glGetUniformLocation(view.get<Shader>(e).program, "model"), 1, GL_FALSE, glm::value_ptr(model));
     }
 }
