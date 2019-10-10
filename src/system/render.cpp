@@ -3,60 +3,60 @@
 //
 
 #include "render.h"
+
 #include <iostream>
 #include <GL/glew.h>
+
 #include "../components/Shader.h"
 #include "../components/Render.h"
+
 #include "../util/files.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include "../util/stb_image.h"
 
 void System::shader(Registry &reg) {
-    const auto view = reg.view<Shader, Renderable>();
+    const auto view = reg.view<Shader>();
+
     for (const Entity e : view) {
         // Vertex
-        std::string vertexStr = getStringFromFile(view.get<Shader>(e).filePathShader);
-        const char* vertexShaderSource = view.get<Shader>(e).vertexShaderSource;
-        vertexShaderSource = vertexStr.c_str();
-        int* vertexShader = &view.get<Shader>(e).vertexShader;
-
-        *vertexShader = glCreateShader(GL_VERTEX_SHADER);
-        glShaderSource(*vertexShader, 1, &vertexShaderSource, NULL);
-        glCompileShader(*vertexShader);
+        std::string vertexStr = getStringFromFile(view.get(e).vertexPath.c_str());
+        int vertexShader = glCreateShader(GL_VERTEX_SHADER);
+        const char* vertexSource = vertexStr.c_str();
+        
+        glShaderSource(vertexShader, 1, &vertexSource, NULL);
+        glCompileShader(vertexShader);
 
         // Check Vertex errors
         int success;
         char infoLog[512];
-        glGetShaderiv(*vertexShader, GL_COMPILE_STATUS, &success);
+        glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
 
         if (!success) {
-            glGetShaderInfoLog(*vertexShader, 512, NULL, infoLog);
+            glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
             std::cout << "ERROR Vertex Shader \n" << infoLog << std::endl;
         }
 
         // Fragment
-        std::string fragmentStr = getStringFromFile(view.get<Shader>(e).filePathVertex);
-        const char* fragmentShaderSource = view.get<Shader>(e).fragmentShaderSource;
-        fragmentShaderSource = fragmentStr.c_str();
-        int* fragmentShader = &view.get<Shader>(e).fragmentShader;
-
-        *fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-        glShaderSource(*fragmentShader, 1, &fragmentShaderSource, NULL);
-        glCompileShader(*fragmentShader);
+        std::string fragmentStr = getStringFromFile(view.get(e).fragmentPath.c_str());
+        int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+        const char* fragmentSource = fragmentStr.c_str();
+        
+        glShaderSource(fragmentShader, 1, &fragmentSource, NULL);
+        glCompileShader(fragmentShader);
 
         // Check Fragment errors
-        glGetShaderiv(*fragmentShader, GL_COMPILE_STATUS, &success);
+        glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
 
         if (!success) {
-            glGetShaderInfoLog(*fragmentShader, 512, NULL, infoLog);
+            glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
             std::cout << "ERROR Fragment Shader \n" << infoLog << std::endl;
         }
 
         // Link shaders
-        int* shaderProgram = &view.get<Shader>(e).shaderProgram;
+        int* shaderProgram = &view.get(e).program;
         *shaderProgram = glCreateProgram();
-        glAttachShader(*shaderProgram, *vertexShader);
-        glAttachShader(*shaderProgram, *fragmentShader);
+        glAttachShader(*shaderProgram, vertexShader);
+        glAttachShader(*shaderProgram, fragmentShader);
         glLinkProgram(*shaderProgram);
 
         // check program errors
@@ -68,12 +68,19 @@ void System::shader(Registry &reg) {
         }
 
         // clean up
-        glDeleteShader(*vertexShader);
-        glDeleteShader(*fragmentShader);
+        glDeleteShader(vertexShader);
+        glDeleteShader(fragmentShader);
+    }
+}
 
+void System::preRender(Registry &reg) {
+    const auto view = reg.view<Renderable, Shader, Mesh>();
+
+    for (const Entity e : view) {
         unsigned int* VAO = &view.get<Renderable>(e).VAO;
         unsigned int* VBO = &view.get<Renderable>(e).VBO;
         unsigned int* EBO = &view.get<Renderable>(e).EBO;
+
 
         glGenVertexArrays(1, VAO);
         glGenBuffers(1, VBO);
@@ -81,51 +88,27 @@ void System::shader(Registry &reg) {
 
         // bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
         glBindVertexArray(*VAO);
-
         glBindBuffer(GL_ARRAY_BUFFER, *VBO);
-        glBufferData(GL_ARRAY_BUFFER, view.get<Shader>(e).verticesSize, view.get<Shader>(e).vertices, GL_STATIC_DRAW);
+
+        std::vector<Vertex> vertices = view.get<Mesh>(e).vertices;
+        std::vector<unsigned int> indices = view.get<Mesh>(e).indices;
+
+        glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), &vertices[0], GL_STATIC_DRAW);
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, *EBO);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, view.get<Shader>(e).indicesSize, view.get<Shader>(e).indices, GL_STATIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
 
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+        // Vertex positions
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
         glEnableVertexAttribArray(0);
 
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3* sizeof(float)));
+        // Vertex colors
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Colors));
         glEnableVertexAttribArray(1);
 
-        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6* sizeof(float)));
+        // Vertex textures
+        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
         glEnableVertexAttribArray(2);
-
-        // texture
-        const char* texturePath = view.get<Shader>(e).texturePath;
-        if (texturePath != nullptr) {
-            unsigned int* texture = &view.get<Shader>(e).texture;
-            glGenTextures(1, texture);
-            glBindTexture(GL_TEXTURE_2D, *texture);
-
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-            int width, height, nrChannels;
-            stbi_set_flip_vertically_on_load(true); // tell stb_image.h to flip loaded texture's on the y-axis.
-            unsigned char* data = stbi_load(texturePath, &width, &height, &nrChannels, 0);
-
-            if (data) {
-                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-                glGenerateMipmap(GL_TEXTURE_2D);
-            } else {
-                std::cout << "Failed to load texture" << std::endl;
-            }
-
-            stbi_image_free(data);
-
-            glUseProgram(*shaderProgram);
-            glUniform1i(glGetUniformLocation(*shaderProgram, "texture1"), 0);
-        }
 
         // note that this is allowed, the call to glVertexAttribPointer registered VBO as the vertex attribute's
         // bound vertex buffer object so afterwards we can safely unbind
@@ -141,20 +124,12 @@ void System::shader(Registry &reg) {
 }
 
 void System::render(Registry &reg) {
-    const auto view = reg.view<Shader, Renderable>();
+    const auto view = reg.view<Shader, Renderable, Mesh>();
     for (const Entity e : view) {
-        const char* texturePath = view.get<Shader>(e).texturePath;
-        if (texturePath != nullptr) {
-            unsigned int* texture = &view.get<Shader>(e).texture;
-            glActiveTexture(GL_TEXTURE0);
-            glBindTexture(GL_TEXTURE_2D, *texture);
-        }
-
-        glUseProgram(view.get<Shader>(e).shaderProgram);
+        glUseProgram(view.get<Shader>(e).program);
         glBindVertexArray(view.get<Renderable>(e).VAO);
-        int size;
-        glGetBufferParameteriv(GL_ELEMENT_ARRAY_BUFFER, GL_BUFFER_SIZE, &size);
-        glDrawElements(GL_TRIANGLES, size / sizeof(GLushort), GL_UNSIGNED_INT, 0);
+
+        glDrawElements(GL_TRIANGLES, view.get<Mesh>(e).indices.size(), GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
