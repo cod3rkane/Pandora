@@ -22,12 +22,15 @@ void System::userInputs(Registry &reg, GLFWwindow* mainWindow, float deltaTime) 
     if (glfwGetKey(mainWindow, GLFW_KEY_W) == GLFW_PRESS) {
         camera->Position += cameraSpeed * camera->Front;
     }
+
     if (glfwGetKey(mainWindow, GLFW_KEY_S) == GLFW_PRESS) {
         camera->Position -= cameraSpeed * camera->Front;
     }
+
     if (glfwGetKey(mainWindow, GLFW_KEY_A) == GLFW_PRESS) {
         camera->Position -= glm::normalize(glm::cross(camera->Front, camera->Up)) * cameraSpeed;
     }
+    
     if (glfwGetKey(mainWindow, GLFW_KEY_D) == GLFW_PRESS) {
         camera->Position += glm::normalize(glm::cross(camera->Front, camera->Up)) * cameraSpeed;
     }
