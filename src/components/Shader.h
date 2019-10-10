@@ -5,22 +5,12 @@
 #ifndef CGAME_SHADER_H
 #define CGAME_SHADER_H
 
-#include <GL/glew.h>
+#include <iostream>
 
 struct Shader {
-    const char* filePathShader;
-    const char* filePathVertex;
-    const char* texturePath;
-    const float* vertices;
-    unsigned long verticesSize;
-    const unsigned int* indices;
-    unsigned long indicesSize;
-    const char* vertexShaderSource;
-    int vertexShader;
-    const char* fragmentShaderSource;
-    int fragmentShader;
-    int shaderProgram;
-    unsigned int texture;
+    std::string vertexPath;
+    std::string fragmentPath;
+    int program;
 };
 
 #endif //CGAME_SHADER_H
