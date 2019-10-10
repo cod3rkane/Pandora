@@ -9,6 +9,7 @@
 
 namespace System {
     void shader(Registry &reg);
+    void preRender(Registry &reg);
     void render(Registry &reg);
     void cleanRender(Registry &reg);
 }
