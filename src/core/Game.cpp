@@ -13,6 +13,7 @@
 #include "../components/Render.h"
 #include "../components/Transform.h"
 #include "../util/Camera.h"
+#include "Terrain.h"
 
 Game::Game() {
     Camera playerCamera(glm::vec3(0.0f, 0.0f, 3.0f));
@@ -77,6 +78,8 @@ void Game::init(GLFWwindow* mainWindow) {
         glm::vec3(0.0f, 1.0f, 0.0f),
         glm::vec3(0.2f, 0.2f, 0.2f)
     );
+
+    createSimpleTerrain(reg);
 
     System::shader(reg);
     System::preRender(reg);
