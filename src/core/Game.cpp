@@ -16,7 +16,7 @@
 #include "Terrain.h"
 
 Game::Game() {
-    Camera playerCamera(glm::vec3(0.0f, 0.0f, 3.0f));
+    Camera playerCamera(glm::vec3(1.7f, 3.31f, 0.73f), glm::vec3(0.0f, 1.0f, 0.0f), -1.64f, -23.71f);
     entt::service_locator<Camera>::set(playerCamera);
 }
 
