@@ -28,7 +28,14 @@ void Game::init(GLFWwindow* mainWindow) {
     window = mainWindow;
 
     createSimpleTerrain(reg);
-    makeTree(reg);
+    makeTree(reg, glm::vec3(6.0f, -0.2f, 4.0f));
+    makeTree(reg, glm::vec3(8.0f, -0.2f, 1.0f));
+    makeTree(reg, glm::vec3(10.0f, -0.2f, 2.0f));
+    makeTree(reg, glm::vec3(8.0f, -0.2f, 2.0f));
+    makeTree(reg, glm::vec3(6.0f, -0.2f, 2.25f));
+    makeTree(reg, glm::vec3(8.8f, -0.2f, -2.2f));
+    makeTree(reg, glm::vec3(10.2f, -0.2f, 1.4f));
+    makeTree(reg, glm::vec3(9.5f, -0.2f, -2.0f));
 
     System::shader(reg);
     System::preRender(reg);

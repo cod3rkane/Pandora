@@ -1,7 +1,6 @@
 #include "Terrain.h"
 
 #include <iostream>
-#include <glm/ext.hpp>
 
 #include "../components/Shader.h"
 #include "../components/Render.h"
@@ -60,7 +59,7 @@ void createSimpleTerrain(Registry &reg) {
     );
 }
 
-void makeTree(Registry &reg) {
+void makeTree(Registry &reg, glm::vec3 position) {
     // top of tree
     Vertex v0 = {glm::vec3(-1.0f, 6.0f, 0.0f), glm::vec3(0.070f, 0.478f, 0.196f), glm::vec2(1.0f, 1.0f)};
     Vertex v1 = {glm::vec3(1.0f, 6.0f, 0.0f), glm::vec3(0.070f, 0.478f, 0.196f), glm::vec2(1.0f, 1.0f)};
@@ -147,7 +146,7 @@ void makeTree(Registry &reg) {
     );
     reg.assign<Transform>(
         tree,
-        glm::vec3(1.0f, 0.0f, -3.0f),
+        position,
         100,
         100,
         glm::vec3(0.0f, 1.0f, 0.0f),
