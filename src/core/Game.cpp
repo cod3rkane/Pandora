@@ -28,6 +28,7 @@ void Game::init(GLFWwindow* mainWindow) {
     window = mainWindow;
 
     createSimpleTerrain(reg);
+    makeTree(reg);
 
     System::shader(reg);
     System::preRender(reg);
