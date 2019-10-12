@@ -37,7 +37,7 @@ void System::userInputs(Registry &reg, GLFWwindow* mainWindow, float deltaTime) 
 
     double mouseX, mouseY;
     glfwGetCursorPos(mainWindow, &mouseX, &mouseY);
-    int mouseLeftBtn = glfwGetMouseButton(mainWindow, GLFW_MOUSE_BUTTON_LEFT);
+    int mouseLeftBtn = glfwGetMouseButton(mainWindow, GLFW_MOUSE_BUTTON_RIGHT);
     if (mouseLeftBtn == GLFW_PRESS) {
         if (firstMouse) {
             lastMouseX = mouseX;
