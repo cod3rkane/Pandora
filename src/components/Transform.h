@@ -21,7 +21,7 @@ struct Transform2D {
     float height;
     glm::vec2 Position;
     glm::vec2 Scale;
-    glm::vec2 Rotation;
+    glm::vec3 Rotation;
 };
 
 #endif //CGAME_TRANSFORM_H

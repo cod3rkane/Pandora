@@ -50,8 +50,8 @@ void Game::update(float deltaTime, int windowWidth, int windowHeight) {
     // create world
 
     System::userInputs(reg, window, deltaTime);
-    System::transformations(reg, windowWidth, windowHeight);
-    System::transformations2D(reg, windowWidth, windowHeight);
+    System::transformations(reg, deltaTime, windowWidth, windowHeight);
+    System::transformations2D(reg, deltaTime, windowWidth, windowHeight);
 }
 
 void Game::start(float deltaTime, int windowWidth, int windowHeight) {
