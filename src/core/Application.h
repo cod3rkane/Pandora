@@ -14,7 +14,7 @@
 
 class Application {
     GLFWwindow* window = nullptr;
-    std::string title = "Pandora Project - Alpha 0.0.1";
+    std::string title = "Pandora Project - Alpha 0.0.2";
     Game game;
     int windowWidth = 1280;
     int windowHeight = 720;
