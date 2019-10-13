@@ -115,6 +115,8 @@ void System::preRender(Registry &reg) {
 }
 
 void System::render(Registry &reg) {
+    // glEnable(GL_CULL_FACE);
+    // glCullFace(GL_BACK);
     const auto view = reg.view<Shader, Renderable, Mesh>();
     for (const Entity e : view) {
         glUseProgram(view.get<Shader>(e).program);
