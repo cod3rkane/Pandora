@@ -161,12 +161,14 @@ void System::render(Registry &reg, float deltaTime, int windowWidth, int windowH
 
     const auto view2d = reg.view<Shader, Renderable, Mesh2D>();
     for (const Entity e : view2d) {
+        glDisable(GL_DEPTH_TEST);
         glUseProgram(view2d.get<Shader>(e).program);
         glBindVertexArray(view2d.get<Renderable>(e).VAO);
 
         glDrawArrays(GL_TRIANGLES, 0, view2d.get<Mesh2D>(e).vertices.size());
         glBindVertexArray(0);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glEnable(GL_DEPTH_TEST);
     }
 }
 
