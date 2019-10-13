@@ -45,20 +45,23 @@ void System::transformations2D(Registry &reg, float deltaTime, int windowWidth, 
     for (const Entity e : view) {
         glm::mat4 model = glm::mat4(1.0f);
 
-        glm::vec2 rotation = view.get<Transform2D>(e).Rotation;
+        glm::vec3 rotation = view.get<Transform2D>(e).Rotation;
 
         model = glm::translate(model, glm::vec3(view.get<Transform2D>(e).Position, 0.0f));
-        model = glm::rotate(model, view.get<Transform2D>(e).Rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
-        model = glm::rotate(model, view.get<Transform2D>(e).Rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
-        model = glm::rotate(model, view.get<Transform2D>(e).Rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
+        model = glm::rotate(model, rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
+        model = glm::rotate(model, rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
+        model = glm::rotate(model, rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
 
         glUseProgram(view.get<Shader>(e).program);
 
         // resize GUI
         float xScale = view.get<Transform2D>(e).width / windowWidth;
         float yScale = view.get<Transform2D>(e).height / windowHeight;
-        // @TODO if it's rotation is better to use xScale x xScale, otherwise yScale instead.
-        glUniform2f(glGetUniformLocation(view.get<Shader>(e).program, "scale"), xScale, xScale);
+        if (rotation.x == 0.0f && rotation.y == 0.0f && rotation.z == 0.0f) {
+            glUniform2f(glGetUniformLocation(view.get<Shader>(e).program, "scale"), xScale, yScale);
+        } else {
+            glUniform2f(glGetUniformLocation(view.get<Shader>(e).program, "scale"), xScale, xScale);
+        }
         glUniformMatrix4fv(glGetUniformLocation(view.get<Shader>(e).program, "model"), 1, GL_FALSE, glm::value_ptr(model));
     }
 }

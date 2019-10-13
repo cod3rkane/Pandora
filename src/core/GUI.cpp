@@ -21,8 +21,8 @@ void GUI::create(Registry &reg) {
         panel,
         vertices
     );
-    float width = 256.0f;
-    float height = 256.0f;
+    float width = 50.0f;
+    float height = 50.0f;
 
     reg.assign<Transform2D>(
         panel,
