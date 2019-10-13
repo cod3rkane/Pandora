@@ -19,7 +19,7 @@ public:
     Game();
     void init(GLFWwindow* mainWindow);
     void update(float deltaTime, int windowWidth, int windowHeight);
-    void start();
+    void start(float deltaTime, int windowWidth, int windowHeight);
     void clean();
     ~Game();
 };

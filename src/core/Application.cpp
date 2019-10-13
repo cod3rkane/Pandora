@@ -66,7 +66,7 @@ void Application::start() {
 
         game.update(deltaTime, windowWidth, windowHeight);
 
-        game.start();
+        game.start(deltaTime, windowWidth, windowHeight);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
