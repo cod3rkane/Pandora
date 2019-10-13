@@ -6,11 +6,10 @@
 #define CGAME_TRANSFORMATIONS_H
 
 #include "../util/registry.h"
-#include <glm/glm.hpp>
 
 namespace System {
-  void transformations(Registry &reg, int windowWidth, int windowHeight);
-  void transformations2D(Registry &reg, int windowWidth, int windowHeight);
+  void transformations(Registry &reg, float deltaTime, int windowWidth, int windowHeight);
+  void transformations2D(Registry &reg, float deltaTime, int windowWidth, int windowHeight);
 }
 
 
