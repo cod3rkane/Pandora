@@ -8,7 +8,7 @@ find_package(OpenGL REQUIRED)
 find_package(glfw3 3.3 REQUIRED)
 find_package(GLEW REQUIRED)
 
-add_executable(cgame main.cpp src/core/Application.cpp src/core/Application.h src/core/Game.cpp src/core/Game.h src/util/registry.h src/components/Render.h src/components/Shader.h src/util/files.h src/system/render.cpp src/system/render.h src/util/files.cpp src/util/stb_image.h src/components/Transform.h src/system/transformations.cpp src/system/transformations.h src/util/Camera.cpp src/util/Camera.h src/system/interactions.cpp src/system/interactions.h src/core/Terrain.cpp src/core/Terrain.h)
+add_executable(cgame main.cpp src/core/Application.cpp src/core/Application.h src/core/Game.cpp src/core/Game.h src/util/registry.h src/components/Render.h src/components/Shader.h src/util/files.h src/system/render.cpp src/system/render.h src/util/files.cpp src/util/stb_image.h src/components/Transform.h src/system/transformations.cpp src/system/transformations.h src/util/Camera.cpp src/util/Camera.h src/system/interactions.cpp src/system/interactions.h src/core/Terrain.cpp src/core/Terrain.h src/core/GUI.cpp src/core/GUI.h)
 
 pkg_search_module(GLEW REQUIRED glew)
 include_directories(${GLEW_INCLUDE_DIRS})
