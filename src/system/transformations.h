@@ -10,6 +10,7 @@
 
 namespace System {
   void transformations(Registry &reg, int windowWidth, int windowHeight);
+  void transformations2D(Registry &reg, int windowWidth, int windowHeight);
 }
 
 

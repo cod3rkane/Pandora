@@ -38,3 +38,25 @@ void System::transformations(Registry &reg, int windowWidth, int windowHeight) {
         glUniformMatrix4fv(glGetUniformLocation(view.get<Shader>(e).program, "model"), 1, GL_FALSE, glm::value_ptr(model));
     }
 }
+
+void System::transformations2D(Registry &reg, int windowWidth, int windowHeight) {
+    const auto view = reg.view<Shader, Transform2D>();
+    for (const Entity e : view) {
+        glm::mat4 model = glm::mat4(1.0f);
+
+        glm::vec2 rotation = view.get<Transform2D>(e).Rotation;
+
+        model = glm::translate(model, glm::vec3(view.get<Transform2D>(e).Position, 0.0f));
+        model = glm::rotate(model, glm::radians(rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+        model = glm::rotate(model, glm::radians(rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+        model = glm::scale(model, glm::vec3(view.get<Transform2D>(e).Scale, 0.0f));
+
+        glUseProgram(view.get<Shader>(e).program);
+
+        // resize GUI
+        float xScale = view.get<Transform2D>(e).width / windowWidth;
+        float yScale = view.get<Transform2D>(e).height / windowHeight;
+        glUniform2f(glGetUniformLocation(view.get<Shader>(e).program, "scale"), xScale, yScale);
+        glUniformMatrix4fv(glGetUniformLocation(view.get<Shader>(e).program, "model"), 1, GL_FALSE, glm::value_ptr(model));
+    }
+}
