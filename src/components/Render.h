@@ -20,6 +20,12 @@ struct Vertex {
     glm::vec2 TexCoords;
 };
 
+struct Vertex2D {
+    glm::vec2 Positions;
+    glm::vec2 Colors;
+    // glm::vec2 TexCoords;
+};
+
 struct Texture {
     unsigned int id;
     std::string type;
@@ -30,6 +36,12 @@ struct Mesh {
     std::vector<Vertex> vertices;
     std::vector<unsigned int> indices;
     std::vector<Texture> textures;
+};
+
+struct Mesh2D {
+    std::vector<Vertex2D> vertices;
+    // std::vector<unsigned int> indices;
+    // std::vector<Texture> textures;
 };
 
 #endif //CGAME_RENDERABLE_H
