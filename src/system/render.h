@@ -10,7 +10,7 @@
 namespace System {
     void shader(Registry &reg);
     void preRender(Registry &reg);
-    void render(Registry &reg);
+    void render(Registry &reg, float deltaTime, int windowWidth, int windowHeight);
     void cleanRender(Registry &reg);
 }
 

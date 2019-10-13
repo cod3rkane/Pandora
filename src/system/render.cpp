@@ -112,17 +112,59 @@ void System::preRender(Registry &reg) {
 
         glBindVertexArray(0);
     }
+
+    const auto view2d = reg.view<Renderable, Shader, Mesh2D>();
+
+    for (const Entity e : view2d) {
+        unsigned int* VAO = &view2d.get<Renderable>(e).VAO;
+        unsigned int* VBO = &view2d.get<Renderable>(e).VBO;
+
+
+        glGenVertexArrays(1, VAO);
+        glGenBuffers(1, VBO);
+        // glGenBuffers(1, EBO);
+
+        // bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
+        glBindVertexArray(*VAO);
+        glBindBuffer(GL_ARRAY_BUFFER, *VBO);
+
+        std::vector<Vertex2D> vertices = view2d.get<Mesh2D>(e).vertices;
+
+        glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex2D), &vertices[0], GL_STATIC_DRAW);
+
+        // Vertex positions
+        glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex2D), (void*)0);
+        glEnableVertexAttribArray(0);
+
+        // Vertex colors
+        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex2D), (void*)offsetof(Vertex2D, Colors));
+        glEnableVertexAttribArray(1);
+
+        // Vertex textures
+        // glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex2D), (void*)offsetof(Vertex2D, TexCoords));
+        // glEnableVertexAttribArray(2);
+
+        glBindVertexArray(0);
+    }
 }
 
-void System::render(Registry &reg) {
-    // glEnable(GL_CULL_FACE);
-    // glCullFace(GL_BACK);
+void System::render(Registry &reg, float deltaTime, int windowWidth, int windowHeight) {
     const auto view = reg.view<Shader, Renderable, Mesh>();
     for (const Entity e : view) {
         glUseProgram(view.get<Shader>(e).program);
         glBindVertexArray(view.get<Renderable>(e).VAO);
 
         glDrawElements(GL_TRIANGLES, view.get<Mesh>(e).indices.size(), GL_UNSIGNED_INT, 0);
+        glBindVertexArray(0);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+    }
+
+    const auto view2d = reg.view<Shader, Renderable, Mesh2D>();
+    for (const Entity e : view2d) {
+        glUseProgram(view2d.get<Shader>(e).program);
+        glBindVertexArray(view2d.get<Renderable>(e).VAO);
+
+        glDrawArrays(GL_TRIANGLES, 0, view2d.get<Mesh2D>(e).vertices.size());
         glBindVertexArray(0);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
