@@ -11,10 +11,12 @@
 #include <glm/ext.hpp>
 
 #include "../util/registry.h"
+#include "UIManager.h"
 
 class Game {
     Registry reg;
     GLFWwindow* window;
+    UIManager uiManager;
 public:
     Game();
     void init(GLFWwindow* mainWindow);
