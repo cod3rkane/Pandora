@@ -12,6 +12,7 @@
 
 #include "../util/registry.h"
 #include "UIManager.h"
+#include "../system/render.h"
 
 class Game {
     Registry reg;
