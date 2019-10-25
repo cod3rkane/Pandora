@@ -5,22 +5,23 @@
 #include <vector>
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
+#include <GL/glew.h>
 
 #include "../../util/registry.h"
 #include "../../components/Shader.h"
 #include "../../components/Transform.h"
 #include "../../components/Render.h"
+#include "../../util/Maths.h"
 
 namespace UI {
     class ComponentCore {
+    public:
         std::vector<Vertex2D> vertices;
         float width = 50.0f;
         float height = 50.0f;
         glm::vec3 Position;
         glm::vec3 Scale;
         glm::vec3 Rotation;
-
-    public:
         Entity entity;
 
         ComponentCore() {
@@ -81,6 +82,10 @@ namespace UI {
 
         const Entity getEntity() {
             return entity;
+        }
+
+        glm::mat4 getModelMatrix() {
+            return Maths::createTransformationMatrix(Position, Scale, Rotation);
         }
 
         void setupVertices() {
