@@ -5,6 +5,13 @@
 #ifndef CGAME_RENDER_H
 #define CGAME_RENDER_H
 
+#include <iostream>
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+#include <iterator>
+#include <map>
+#include <vector>
+
 #include "../util/registry.h"
 
 namespace System {
