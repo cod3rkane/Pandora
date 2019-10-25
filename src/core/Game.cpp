@@ -41,16 +41,15 @@ void Game::init(GLFWwindow* mainWindow) {
     
     UI::Component panel;
     panel.setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
-    panel.setScale(glm::vec3(-0.3, -0.3, -0.3));
     uiManager.addComponent(panel);
 
     for (int i = 0; i < 10; i++) {
         UI::Component panel2;
-        panel2.setPosition(glm::vec3(i * 0.1f, i * 0.1f, 0.0f));
-        panel2.setScale(glm::vec3(0.3, 0.3, 0.3));
+        panel2.setPosition(glm::vec3(i * 50.0f, i * 50.0f, 0.0f));
         uiManager.addComponent(panel2);
     }
 
+    // @TODO once we've component to setup.
     uiManager.setupComponents();
 
     System::shader(reg);
@@ -61,7 +60,7 @@ void Game::update(float deltaTime, int windowWidth, int windowHeight) {
     // create world
     System::preRender(reg);
     
-    uiManager.update();
+    uiManager.update(deltaTime, windowWidth, windowHeight);
     System::userInputs(reg, window, deltaTime);
     System::transformations(reg, deltaTime, windowWidth, windowHeight);
 }
@@ -71,7 +70,7 @@ void Game::start(float deltaTime, int windowWidth, int windowHeight) {
     // render things
     // Load Systems
     System::render(reg, deltaTime, windowWidth, windowHeight);
-    uiManager.render();
+    uiManager.render(deltaTime, windowWidth, windowHeight);
 }
 
 void Game::clean() {
