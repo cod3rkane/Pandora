@@ -7,12 +7,15 @@
 
 #include "../util/registry.h"
 #include "ui/UIComponent.h"
+#include "Shader.h"
 #include "../components/Render.h"
-#include "../components/Shader.h"
 #include "../components/Transform.h"
 
 class UIManager {
     Registry* reg;
+    GLuint vaoID;
+    GLuint vboID;
+    Core::Shader shader2d;
     std::vector<UI::Component> components;
 public:
     UIManager();
@@ -20,6 +23,7 @@ public:
     void createSimpleSquare();
     void addComponent(UI::Component component);
     void setReg(Registry &r);
+    void setupComponents();
 
     void init();
     void update();
