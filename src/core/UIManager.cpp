@@ -62,7 +62,7 @@ void UIManager::init() {
     glGenBuffers(1, &vboID);
 }
 
-void UIManager::update() {
+void UIManager::update(float deltaTime, int windowWidth, int windowHeight) {
 }
 
 void UIManager::setupComponents() {
@@ -92,7 +92,7 @@ void UIManager::setupComponents() {
     glBindVertexArray(0);
 }
 
-void UIManager::render() {
+void UIManager::render(float deltaTime, int windowWidth, int windowHeight) {
     shader2d.bind();
     glBindVertexArray(vaoID);
     // @TODO: create System to render 2D.
@@ -106,7 +106,7 @@ void UIManager::render() {
     for (UI::Component component : components) {
         glm::vec3 scale = component.getScale();
         glUniform2f(glGetUniformLocation(shader2d.getProgramID(), "scale"), scale.x, scale.y);
-        glm::mat4 matrix = component.getModelMatrix();
+        glm::mat4 matrix = component.getModelMatrix(windowWidth, windowHeight);
         glUniformMatrix4fv(glGetUniformLocation(shader2d.getProgramID(), "model"), 1, GL_FALSE, glm::value_ptr(matrix));    
         glDrawArrays(GL_TRIANGLES, 0, component.getVertices().size());
     }
