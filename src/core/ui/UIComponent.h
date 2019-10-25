@@ -84,8 +84,33 @@ namespace UI {
             return entity;
         }
 
-        glm::mat4 getModelMatrix() {
-            return Maths::createTransformationMatrix(Position, Scale, Rotation);
+        glm::mat4 getModelMatrix(int windowWidth, int windowHeight) {
+            // resize GUI
+            float xScale = width / windowWidth;
+            float yScale = height / windowHeight;
+            float xOffset = (Position.x / windowWidth) * 2.0f -1.0f;
+            float yOffset = (Position.y / windowHeight) * 2.0f -1.0f;
+
+            // @TODO: dummy logic, fix that later
+            if (xOffset < 0) {
+                xOffset += xScale;
+            } else {
+                xOffset -= xScale;
+            }
+
+            if (yOffset < 0) {
+                yOffset += yScale;
+            } else {
+                yOffset -= yScale;
+            }
+
+            float inverseYOffset = yOffset * -1.0f;
+
+            return Maths::createTransformationMatrix(
+                glm::vec3(xOffset, inverseYOffset, 0.0f),
+                glm::vec3(xScale, yScale, 0.0f),
+                Rotation
+            );
         }
 
         void setupVertices() {
