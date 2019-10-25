@@ -26,8 +26,8 @@ public:
     void setupComponents();
 
     void init();
-    void update();
-    void render();
+    void update(float deltaTime, int windowWidth, int windowHeight);
+    void render(float deltaTime, int windowWidth, int windowHeight);
     void clean();
 };
 
