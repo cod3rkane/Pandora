@@ -87,6 +87,23 @@ void UIManager::setupComponents() {
         // glEnableVertexAttribArray(2);
     }
 
+    glGenBuffers(1, &tmBufferID);
+    glBindBuffer(GL_ARRAY_BUFFER, tmBufferID);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4) * components.size(), 0, GL_DYNAMIC_DRAW);
+
+    glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(sizeof(float) * 0));
+	glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(sizeof(float) * 4));
+	glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(sizeof(float) * 8));
+	glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(sizeof(float) * 12));
+	glEnableVertexAttribArray(2);
+	glEnableVertexAttribArray(3);
+	glEnableVertexAttribArray(4);
+	glEnableVertexAttribArray(5);
+	glVertexAttribDivisor(2, 1);
+	glVertexAttribDivisor(3, 1);
+	glVertexAttribDivisor(4, 1);
+	glVertexAttribDivisor(5, 1);
+
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     // unbind VAO
     glBindVertexArray(0);
@@ -100,19 +117,20 @@ void UIManager::render(float deltaTime, int windowWidth, int windowHeight) {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    glEnableVertexAttribArray(0);
-    glEnableVertexAttribArray(1);
-
+    std::vector<glm::mat4> modelMatrices;
     for (UI::Component component : components) {
-        glm::vec3 scale = component.getScale();
-        glUniform2f(glGetUniformLocation(shader2d.getProgramID(), "scale"), scale.x, scale.y);
-        glm::mat4 matrix = component.getModelMatrix(windowWidth, windowHeight);
-        glUniformMatrix4fv(glGetUniformLocation(shader2d.getProgramID(), "model"), 1, GL_FALSE, glm::value_ptr(matrix));
-        glDrawArrays(GL_TRIANGLES, 0, component.getVertices().size());
+        glm::mat4 matrix = glm::mat4(1.0f);
+        matrix = component.getModelMatrix(windowWidth, windowHeight);
+
+        modelMatrices.push_back(matrix);
     }
 
-    glDisableVertexAttribArray(0);
-    glDisableVertexAttribArray(1);
+    glUniform2f(glGetUniformLocation(shader2d.getProgramID(), "scale"), 1.0f, 1.0f);
+    glBindBuffer(GL_ARRAY_BUFFER, tmBufferID);
+    glBufferData(GL_ARRAY_BUFFER, modelMatrices.size() * sizeof(glm::mat4), &modelMatrices[0], GL_DYNAMIC_DRAW);
+
+    glDrawArraysInstanced(GL_TRIANGLES, 0, components.size() * 6, components.size());
+
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 

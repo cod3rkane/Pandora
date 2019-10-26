@@ -16,6 +16,7 @@ class UIManager {
     GLuint vaoID;
     GLuint vboID;
     Core::Shader shader2d;
+    GLuint tmBufferID;
     std::vector<UI::Component> components;
 public:
     UIManager();
