@@ -13,10 +13,10 @@
 #include "../util/registry.h"
 #include "UIManager.h"
 #include "../system/render.h"
+#include "Window.h"
 
 class Game {
     Registry reg;
-    GLFWwindow* window;
     UIManager uiManager;
 public:
     Game();

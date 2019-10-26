@@ -17,7 +17,9 @@
 
 Game::Game() {
     Camera playerCamera(glm::vec3(1.7f, 3.31f, 0.73f), glm::vec3(0.0f, 1.0f, 0.0f), -1.64f, -23.71f);
+    Core::Window Window;
     entt::service_locator<Camera>::set(playerCamera);
+    entt::service_locator<Core::Window>::set(Window);
 }
 
 Game::~Game() {
@@ -25,7 +27,8 @@ Game::~Game() {
 }
 
 void Game::init(GLFWwindow* mainWindow) {
-    window = mainWindow;
+    Core::Window* Window = &entt::service_locator<Core::Window>::ref();
+    Window->setWindow(mainWindow);
 
     createSimpleTerrain(reg);
     makeTree(reg, glm::vec3(6.0f, -0.2f, 4.0f));
@@ -56,12 +59,15 @@ void Game::init(GLFWwindow* mainWindow) {
 }
 
 void Game::update(float deltaTime, int windowWidth, int windowHeight) {
+    Core::Window* Window = &entt::service_locator<Core::Window>::ref();
+    Window->setWidth(windowWidth);
+    Window->setHeight(windowHeight);
     // get inputs
     // create world
     System::preRender(reg);
     
     uiManager.update(deltaTime, windowWidth, windowHeight);
-    System::userInputs(reg, window, deltaTime);
+    System::userInputs(reg, deltaTime);
     System::transformations(reg, deltaTime, windowWidth, windowHeight);
 }
 
