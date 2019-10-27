@@ -8,7 +8,6 @@ UIManager::UIManager(Registry &reg) {
 
 void UIManager::addComponent(UI::Component component) {
     components.push_back(component);
-    colorMatrices.push_back(component.getMesh().color);
 }
 
 void UIManager::setReg(Registry &r) {
@@ -72,7 +71,7 @@ void UIManager::setupComponents() {
 }
 
 void UIManager::update(float deltaTime, int windowWidth, int windowHeight) {
-    
+
 }
 
 void UIManager::render(float deltaTime, int windowWidth, int windowHeight) {
@@ -85,6 +84,7 @@ void UIManager::render(float deltaTime, int windowWidth, int windowHeight) {
 
     for (UI::Component component : components) {
         modelMatrices.push_back(component.getModelMatrix(windowWidth, windowHeight));
+        colorMatrices.push_back(component.getMesh().color);
     }
 
     glUniform2f(glGetUniformLocation(shader2d.getProgramID(), "scale"), 1.0f, 1.0f);
@@ -104,6 +104,7 @@ void UIManager::render(float deltaTime, int windowWidth, int windowHeight) {
     glDisable(GL_BLEND);
     shader2d.unbind();
     modelMatrices.clear();
+    colorMatrices.clear();
 }
 
 void UIManager::clean() {

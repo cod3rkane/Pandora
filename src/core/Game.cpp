@@ -45,6 +45,7 @@ void Game::init(GLFWwindow* mainWindow) {
     UI::Component panel;
     panel.setWidth(100.0f);
     panel.setPosition(glm::vec3(50.0f, 50.0f, 0.0f));
+    panel.setColorMesh(glm::vec4(0.32549f, 0.364706f, 0.709804f, 1.0f));
     uiManager.addComponent(panel);
 
     UI::Component panel2;
