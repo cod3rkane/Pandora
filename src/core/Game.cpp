@@ -62,6 +62,7 @@ void Game::update(float deltaTime, int windowWidth, int windowHeight) {
     Core::Window* Window = &entt::service_locator<Core::Window>::ref();
     Window->setWidth(windowWidth);
     Window->setHeight(windowHeight);
+
     // get inputs
     // create world
     System::preRender(reg);
