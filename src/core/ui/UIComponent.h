@@ -15,6 +15,7 @@
 
 namespace UI {
     class ComponentCore {
+    protected:
         Mesh2D mesh;
         float width = 50.0f;
         float height = 50.0f;
@@ -22,8 +23,8 @@ namespace UI {
         glm::vec3 Scale;
         glm::vec3 Rotation;
         Entity entity;
+        bool isInteractive = false;
     public:
-
         ComponentCore() {
             setupVertices();
         }
@@ -143,14 +144,28 @@ namespace UI {
             Scale = glm::vec3(1.0f, 1.0f, 1.0f);
             Rotation = glm::vec3(0.0f, 0.0f, 0.0f);
         }
+
+        virtual void update(int windowWidth, int windowHeight, double mouseX, double mouseY, bool isMousePressed) {};
+
+        void setInteractive(bool in) {
+            isInteractive = in;
+        }
     };
 
     class Component : public ComponentCore {
         std::vector<ComponentCore> children;
-
     public:
+        ~Component() {};
+
         void addChildren(ComponentCore& component);
+
         std::vector<ComponentCore> getChildrens();
+
+        void update(int windowWidth, int windowHeight, double mouseX, double mouseY, bool isMousePressed);
+
+        bool getIsInteractive() {
+            return isInteractive;
+        }
     };
 }
 
