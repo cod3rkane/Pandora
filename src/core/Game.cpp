@@ -43,14 +43,14 @@ void Game::init(GLFWwindow* mainWindow) {
     uiManager.init();
     
     UI::Component panel;
-    panel.setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+    panel.setWidth(100.0f);
+    panel.setPosition(glm::vec3(50.0f, 50.0f, 0.0f));
     uiManager.addComponent(panel);
 
-    for (int i = 0; i < 10; i++) {
-        UI::Component panel2;
-        panel2.setPosition(glm::vec3(i * 50.0f, i * 50.0f, 0.0f));
-        uiManager.addComponent(panel2);
-    }
+    UI::Component panel2;
+    panel2.setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+    panel2.setColorMesh(glm::vec4(0.0196078f, 0.909804f, 0.419608f, 0.3f));
+    uiManager.addComponent(panel2);
 
     // @TODO once we've component to setup.
     uiManager.setupComponents();
