@@ -8,6 +8,7 @@ UIManager::UIManager(Registry &reg) {
 
 void UIManager::addComponent(UI::Component component) {
     components.push_back(component);
+    colorMatrices.push_back(component.getMesh().color);
 }
 
 void UIManager::setReg(Registry &r) {
@@ -82,15 +83,8 @@ void UIManager::render(float deltaTime, int windowWidth, int windowHeight) {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    std::vector<glm::mat4> modelMatrices;
-    std::vector<glm::vec4> colorMatrices;
     for (UI::Component component : components) {
-        glm::mat4 matrix = glm::mat4(1.0f);
-        matrix = component.getModelMatrix(windowWidth, windowHeight);
-        glm::vec4 color = component.getMesh().color;
-
-        modelMatrices.push_back(matrix);
-        colorMatrices.push_back(color);
+        modelMatrices.push_back(component.getModelMatrix(windowWidth, windowHeight));
     }
 
     glUniform2f(glGetUniformLocation(shader2d.getProgramID(), "scale"), 1.0f, 1.0f);
@@ -109,6 +103,7 @@ void UIManager::render(float deltaTime, int windowWidth, int windowHeight) {
     glEnable(GL_DEPTH_TEST);
     glDisable(GL_BLEND);
     shader2d.unbind();
+    modelMatrices.clear();
 }
 
 void UIManager::clean() {
