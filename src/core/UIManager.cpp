@@ -71,7 +71,10 @@ void UIManager::setupComponents() {
 }
 
 void UIManager::update(float deltaTime, int windowWidth, int windowHeight) {
-
+    for (UI::Component component : components) {
+        modelMatrices.push_back(component.getModelMatrix(windowWidth, windowHeight));
+        colorMatrices.push_back(component.getMesh().color);
+    }
 }
 
 void UIManager::render(float deltaTime, int windowWidth, int windowHeight) {
@@ -81,11 +84,6 @@ void UIManager::render(float deltaTime, int windowWidth, int windowHeight) {
     glDisable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-    for (UI::Component component : components) {
-        modelMatrices.push_back(component.getModelMatrix(windowWidth, windowHeight));
-        colorMatrices.push_back(component.getMesh().color);
-    }
 
     glUniform2f(glGetUniformLocation(shader2d.getProgramID(), "scale"), 1.0f, 1.0f);
 
