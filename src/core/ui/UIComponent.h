@@ -15,14 +15,14 @@
 
 namespace UI {
     class ComponentCore {
-    public:
-        std::vector<Vertex2D> vertices;
+        Mesh2D mesh;
         float width = 50.0f;
         float height = 50.0f;
         glm::vec3 Position;
         glm::vec3 Scale;
         glm::vec3 Rotation;
         Entity entity;
+    public:
 
         ComponentCore() {
             setupVertices();
@@ -69,11 +69,27 @@ namespace UI {
         }
 
         void setVertices(std::vector<Vertex2D> v) {
-            vertices = v;
+            mesh.vertices = v;
         }
 
         std::vector<Vertex2D> getVertices() {
-            return vertices;
+            return mesh.vertices;
+        }
+
+        void setMesh(Mesh2D m) {
+            mesh = m;
+        }
+
+        Mesh2D getMesh() {
+            return mesh;
+        }
+
+        glm::vec4 getColorMesh() {
+            return mesh.color;
+        }
+
+        void setColorMesh(glm::vec4 c) {
+            mesh.color = c;
         }
 
         void setEntity(Entity e) {
@@ -114,14 +130,15 @@ namespace UI {
         }
 
         void setupVertices() {
-            Vertex2D v0 = { glm::vec2(-1.0f, -1.0f), glm::vec3(0.498039f, 0.596078f, 0.729412f) };
-            Vertex2D v1 = { glm::vec2(1.0f, -1.0f), glm::vec3(0.498039f, 0.596078f, 0.729412f) };
-            Vertex2D v2 = { glm::vec2(-1.0f, 1.0f), glm::vec3(0.498039f, 0.596078f, 0.729412f) };
-            Vertex2D v3 = { glm::vec2(-1.0f, 1.0f), glm::vec3(0.498039f, 0.596078f, 0.729412f) };
-            Vertex2D v4 = { glm::vec2(1.0f, -1.0f), glm::vec3(0.498039f, 0.596078f, 0.729412f) };
-            Vertex2D v5 = { glm::vec2(1.0f, 1.0f), glm::vec3(0.498039f, 0.596078f, 0.729412f) };
+            Vertex2D v0 = { glm::vec2(-1.0f, -1.0f) };
+            Vertex2D v1 = { glm::vec2(1.0f, -1.0f) };
+            Vertex2D v2 = { glm::vec2(-1.0f, 1.0f) };
+            Vertex2D v3 = { glm::vec2(-1.0f, 1.0f) };
+            Vertex2D v4 = { glm::vec2(1.0f, -1.0f) };
+            Vertex2D v5 = { glm::vec2(1.0f, 1.0f) };
 
-            vertices = { v0, v1, v2, v3, v4, v5 };
+            mesh.vertices = { v0, v1, v2, v3, v4, v5 };
+            mesh.color = glm::vec4(0.498039f, 0.596078f, 0.729412f, 1.0f);
             Position = glm::vec3(0.0f, 0.0f, 0.0f);
             Scale = glm::vec3(1.0f, 1.0f, 1.0f);
             Rotation = glm::vec3(0.0f, 0.0f, 0.0f);
