@@ -20,7 +20,7 @@ class Game {
     UIManager uiManager;
 public:
     Game();
-    void init(GLFWwindow* mainWindow);
+    void init(GLFWwindow* mainWindow, int windowWidth, int windowHeight);
     void update(float deltaTime, int windowWidth, int windowHeight);
     void start(float deltaTime, int windowWidth, int windowHeight);
     void clean();

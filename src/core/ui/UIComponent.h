@@ -124,8 +124,8 @@ namespace UI {
             float inverseYOffset = yOffset * -1.0f;
 
             return Maths::createTransformationMatrix(
-                glm::vec3(xOffset, inverseYOffset, 0.0f),
-                glm::vec3(xScale, yScale, 0.0f),
+                Position,
+                glm::vec3(width, height, 0.0f),
                 Rotation
             );
         }

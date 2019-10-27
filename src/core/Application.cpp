@@ -45,7 +45,7 @@ void Application::update() {
 }
 
 void Application::start() {
-    game.init(window);
+    game.init(window, windowWidth, windowHeight);
 
     while (!glfwWindowShouldClose(window)) {
         // per-frame time lofic
