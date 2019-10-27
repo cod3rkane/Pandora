@@ -14,6 +14,7 @@
 #include "../util/Camera.h"
 #include "Terrain.h"
 #include "ui/UIComponent.h"
+#include "ui/Button.h"
 
 Game::Game() {
     Camera playerCamera(glm::vec3(1.7f, 3.31f, 0.73f), glm::vec3(0.0f, 1.0f, 0.0f), -1.64f, -23.71f);
@@ -52,6 +53,10 @@ void Game::init(GLFWwindow* mainWindow) {
     panel2.setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
     panel2.setColorMesh(glm::vec4(0.0196078f, 0.909804f, 0.419608f, 0.3f));
     uiManager.addComponent(panel2);
+
+    UI::Button button;
+    button.setPosition(glm::vec3(100.0f, 200.0f, 0.0f));
+    uiManager.addComponent(button);
 
     // @TODO once we've component to setup.
     uiManager.setupComponents();
