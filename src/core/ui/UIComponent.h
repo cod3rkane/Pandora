@@ -72,7 +72,7 @@ namespace UI {
             mesh.vertices = v;
         }
 
-        std::vector<Vertex2D> getVertices() {
+        const std::vector<Vertex2D> getVertices() {
             return mesh.vertices;
         }
 
@@ -80,7 +80,7 @@ namespace UI {
             mesh = m;
         }
 
-        Mesh2D getMesh() {
+        const Mesh2D getMesh() {
             return mesh;
         }
 
@@ -100,7 +100,7 @@ namespace UI {
             return entity;
         }
 
-        glm::mat4 getModelMatrix(int windowWidth, int windowHeight) {
+        const glm::mat4 getModelMatrix(int windowWidth, int windowHeight) {
             // resize GUI
             float xScale = width / windowWidth;
             float yScale = height / windowHeight;
