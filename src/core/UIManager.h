@@ -21,7 +21,6 @@ class UIManager {
 public:
     UIManager();
     UIManager(Registry &reg);
-    void createSimpleSquare();
     void addComponent(UI::Component component);
     void setReg(Registry &r);
     void setupComponents();

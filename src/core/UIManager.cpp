@@ -6,48 +6,7 @@ UIManager::UIManager(Registry &reg) {
     this->reg = &reg;
 }
 
-void UIManager::createSimpleSquare() {
-    Vertex2D v0 = { glm::vec2(-1.0f, -1.0f), glm::vec3(0.498039f, 0.596078f, 0.729412f) };
-    Vertex2D v1 = { glm::vec2(1.0f, -1.0f), glm::vec3(0.498039f, 0.596078f, 0.729412f) };
-    Vertex2D v2 = { glm::vec2(-1.0f, 1.0f), glm::vec3(0.498039f, 0.596078f, 0.729412f) };
-    Vertex2D v3 = { glm::vec2(-1.0f, 1.0f), glm::vec3(0.498039f, 0.596078f, 0.729412f) };
-    Vertex2D v4 = { glm::vec2(1.0f, -1.0f), glm::vec3(0.498039f, 0.596078f, 0.729412f) };
-    Vertex2D v5 = { glm::vec2(1.0f, 1.0f), glm::vec3(0.498039f, 0.596078f, 0.729412f) };
-
-    std::vector<Vertex2D> vertices = { v0, v1, v2, v3, v4, v5 };
-
-    const Entity panel = reg->create();
-    reg->assign<Renderable>(panel);
-    reg->assign<Mesh2D>(
-        panel,
-        vertices
-    );
-    float width = 50.0f;
-    float height = 50.0f;
-
-    reg->assign<Transform2D>(
-        panel,
-        width,
-        height,
-        glm::vec2(2.0f, 2.0f),
-        glm::vec2(1.0f, 1.0f),
-        glm::vec3(0.0f, 0.0f, 0.0f)
-    );
-}
-
 void UIManager::addComponent(UI::Component component) {
-    // component.setEntity(reg->create());
-
-    // reg->assign<Mesh2D>(component.getEntity(), component.getVertices());
-    // reg->assign<Transform2D>(
-    //     component.getEntity(),
-    //     component.getWidth(),
-    //     component.getHeight(),
-    //     component.getPosition(),
-    //     component.getScale(),
-    //     component.getRotation()
-    // );
-
     components.push_back(component);
 }
 
@@ -73,19 +32,20 @@ void UIManager::setupComponents() {
     for (UI::Component component : components) {
         // std::vector<Vertex2D> vertices = component.getVertices();
         glBufferData(GL_ARRAY_BUFFER, component.vertices.size() * sizeof(Vertex2D), &component.vertices[0], GL_STATIC_DRAW);
-
-        // Vertex positions
-        glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex2D), (void*)0);
-        glEnableVertexAttribArray(0);
-
-        // Vertex colors
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex2D), (void*)offsetof(Vertex2D, Colors));
-        glEnableVertexAttribArray(1);
-
-        // Vertex textures
-        // glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex2D), (void*)offsetof(Vertex2D, TexCoords));
-        // glEnableVertexAttribArray(2);
     }
+
+    // Vertex positions
+
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex2D), (void*)0);
+    glEnableVertexAttribArray(0);
+
+    // Vertex colors
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex2D), (void*)offsetof(Vertex2D, Colors));
+    glEnableVertexAttribArray(1);
+
+    // Vertex textures
+    // glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex2D), (void*)offsetof(Vertex2D, TexCoords));
+    // glEnableVertexAttribArray(2);
 
     glGenBuffers(1, &tmBufferID);
     glBindBuffer(GL_ARRAY_BUFFER, tmBufferID);
