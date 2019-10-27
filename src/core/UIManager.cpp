@@ -71,6 +71,7 @@ void UIManager::setupComponents() {
 }
 
 void UIManager::update(float deltaTime, int windowWidth, int windowHeight) {
+    // Update matrices always after changes
     for (UI::Component component : components) {
         modelMatrices.push_back(component.getModelMatrix(windowWidth, windowHeight));
         colorMatrices.push_back(component.getMesh().color);
