@@ -22,7 +22,6 @@ struct Vertex {
 
 struct Vertex2D {
     glm::vec2 Positions;
-    glm::vec3 Colors;
     // glm::vec2 TexCoords;
 };
 
@@ -39,7 +38,10 @@ struct Mesh {
 };
 
 struct Mesh2D {
+    // {x, y, z}
     std::vector<Vertex2D> vertices;
+    // { x, y, z, opacity }
+    glm::vec4 color;
     // std::vector<unsigned int> indices;
     // std::vector<Texture> textures;
 };
