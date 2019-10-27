@@ -41,6 +41,8 @@ add_executable(
   src/util/Maths.h
   src/core/Window.cpp
   src/core/Window.h
+  src/core/ui/Button.cpp
+  src/core/ui/Button.h
 )
 
 pkg_search_module(GLEW REQUIRED glew)
