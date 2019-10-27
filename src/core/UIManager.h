@@ -2,11 +2,12 @@
 #define CGAME_UIMANAGER_H
 
 #include <iostream>
-#include <glm/vec2.hpp>
 #include <vector>
 #include <entt/entt.hpp>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
+#include <glm/ext.hpp>
 
 #include "../util/registry.h"
 #include "ui/UIComponent.h"
@@ -15,6 +16,7 @@
 #include "../components/Render.h"
 #include "../components/Transform.h"
 #include "Window.h"
+#include "../util/Camera.h"
 
 class UIManager {
     Registry* reg;
@@ -26,6 +28,8 @@ class UIManager {
     std::vector<UI::Component> components;
     std::vector<glm::vec4> colorMatrices;
     std::vector<glm::mat4> modelMatrices;
+    glm::mat4 projection;
+    glm::mat4 view;
 public:
     UIManager();
     UIManager(Registry &reg);

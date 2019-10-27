@@ -17,6 +17,9 @@ void UIManager::setReg(Registry &r) {
 void UIManager::init() {
     shader2d = Core::Shader("assets/shader/vertex2D.glsl", "assets/shader/fragment2D.glsl");
 
+    view = glm::mat4(1.0f);
+    projection = glm::mat4(1.0f);
+
     glGenVertexArrays(1, &vaoID);
     glGenBuffers(1, &vboID);
 }
@@ -80,6 +83,10 @@ void UIManager::update(float deltaTime, int windowWidth, int windowHeight) {
     glfwGetCursorPos(Window->getWindow(), &mouseX, &mouseY);
     int mouseLeftBtn = glfwGetMouseButton(Window->getWindow(), GLFW_MOUSE_BUTTON_LEFT);
 
+    // projection = glm::ortho(0.0f, (float)windowWidth, 0.0f, (float)windowHeight, 0.1f, 100.0f);
+    // projection = glm::ortho(0.0f, (float)windowWidth, (float)windowHeight, 0.0f);
+    // glm::ortho(-4.0f/3.0f, 4.0f/3.0f, -1.0f, 1.0f, -1.0f, 1.0f)
+
     // Update matrices always after changes
     for (UI::Component component : components) {
         component.update(windowWidth, windowHeight, mouseX, mouseY, (bool)mouseLeftBtn == GLFW_PRESS);
@@ -98,7 +105,9 @@ void UIManager::render(float deltaTime, int windowWidth, int windowHeight) {
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     // @TODO Fix Scale
-    glUniform2f(glGetUniformLocation(shader2d.getProgramID(), "scale"), 1.0f, 1.0f);
+    glUniform2f(glGetUniformLocation(shader2d.getProgramID(), "viewport"), (float)windowWidth, (float)windowHeight);
+    glUniformMatrix4fv(glGetUniformLocation(shader2d.getProgramID(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+    glUniformMatrix4fv(glGetUniformLocation(shader2d.getProgramID(), "view"), 1, GL_FALSE, glm::value_ptr(view));
 
     glBindBuffer(GL_ARRAY_BUFFER, tmBufferID);
     glBufferData(GL_ARRAY_BUFFER, modelMatrices.size() * sizeof(glm::mat4), &modelMatrices[0], GL_DYNAMIC_DRAW);
