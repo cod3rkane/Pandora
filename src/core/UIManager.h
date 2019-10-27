@@ -5,9 +5,12 @@
 #include <glm/vec2.hpp>
 #include <vector>
 #include <entt/entt.hpp>
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
 
 #include "../util/registry.h"
 #include "ui/UIComponent.h"
+#include "ui/Button.h"
 #include "Shader.h"
 #include "../components/Render.h"
 #include "../components/Transform.h"

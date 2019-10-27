@@ -71,8 +71,19 @@ void UIManager::setupComponents() {
 }
 
 void UIManager::update(float deltaTime, int windowWidth, int windowHeight) {
+    // get only interactive items
+    // std::vector<UI::Component> interactives;
+    // std::copy_if(components.begin(), components.end(), std::back_inserter(interactives), [](UI::Component e) { return e.getIsInteractive(); });
+
+    Core::Window* Window = &entt::service_locator<Core::Window>::ref();
+    double mouseX, mouseY;
+    glfwGetCursorPos(Window->getWindow(), &mouseX, &mouseY);
+    int mouseLeftBtn = glfwGetMouseButton(Window->getWindow(), GLFW_MOUSE_BUTTON_LEFT);
+
     // Update matrices always after changes
     for (UI::Component component : components) {
+        component.update(windowWidth, windowHeight, mouseX, mouseY, (bool)mouseLeftBtn == GLFW_PRESS);
+
         modelMatrices.push_back(component.getModelMatrix(windowWidth, windowHeight));
         colorMatrices.push_back(component.getMesh().color);
     }
@@ -86,6 +97,7 @@ void UIManager::render(float deltaTime, int windowWidth, int windowHeight) {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+    // @TODO Fix Scale
     glUniform2f(glGetUniformLocation(shader2d.getProgramID(), "scale"), 1.0f, 1.0f);
 
     glBindBuffer(GL_ARRAY_BUFFER, tmBufferID);
