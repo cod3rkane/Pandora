@@ -21,9 +21,6 @@ void UIManager::init() {
     glGenBuffers(1, &vboID);
 }
 
-void UIManager::update(float deltaTime, int windowWidth, int windowHeight) {
-}
-
 void UIManager::setupComponents() {
     // bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
     glBindVertexArray(vaoID);
@@ -31,7 +28,7 @@ void UIManager::setupComponents() {
 
     for (UI::Component component : components) {
         // std::vector<Vertex2D> vertices = component.getVertices();
-        glBufferData(GL_ARRAY_BUFFER, component.vertices.size() * sizeof(Vertex2D), &component.vertices[0], GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, component.getVertices().size() * sizeof(Vertex2D), &component.getVertices()[0], GL_STATIC_DRAW);
     }
 
     // Vertex positions
@@ -40,8 +37,12 @@ void UIManager::setupComponents() {
     glEnableVertexAttribArray(0);
 
     // Vertex colors
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex2D), (void*)offsetof(Vertex2D, Colors));
+    glGenBuffers(1, &colorBufferID);
+    glBindBuffer(GL_ARRAY_BUFFER, colorBufferID);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec4) * components.size(), 0, GL_DYNAMIC_DRAW);
+    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(glm::vec4), (void*)0);
     glEnableVertexAttribArray(1);
+    glVertexAttribDivisor(1, 1);
 
     // Vertex textures
     // glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex2D), (void*)offsetof(Vertex2D, TexCoords));
@@ -69,6 +70,10 @@ void UIManager::setupComponents() {
     glBindVertexArray(0);
 }
 
+void UIManager::update(float deltaTime, int windowWidth, int windowHeight) {
+    
+}
+
 void UIManager::render(float deltaTime, int windowWidth, int windowHeight) {
     shader2d.bind();
     glBindVertexArray(vaoID);
@@ -78,16 +83,23 @@ void UIManager::render(float deltaTime, int windowWidth, int windowHeight) {
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     std::vector<glm::mat4> modelMatrices;
+    std::vector<glm::vec4> colorMatrices;
     for (UI::Component component : components) {
         glm::mat4 matrix = glm::mat4(1.0f);
         matrix = component.getModelMatrix(windowWidth, windowHeight);
+        glm::vec4 color = component.getMesh().color;
 
         modelMatrices.push_back(matrix);
+        colorMatrices.push_back(color);
     }
 
     glUniform2f(glGetUniformLocation(shader2d.getProgramID(), "scale"), 1.0f, 1.0f);
+
     glBindBuffer(GL_ARRAY_BUFFER, tmBufferID);
     glBufferData(GL_ARRAY_BUFFER, modelMatrices.size() * sizeof(glm::mat4), &modelMatrices[0], GL_DYNAMIC_DRAW);
+
+    glBindBuffer(GL_ARRAY_BUFFER, colorBufferID);
+    glBufferData(GL_ARRAY_BUFFER, colorMatrices.size() * sizeof(glm::vec4), &colorMatrices[0], GL_DYNAMIC_DRAW);
 
     glDrawArraysInstanced(GL_TRIANGLES, 0, components.size() * 6, components.size());
 
