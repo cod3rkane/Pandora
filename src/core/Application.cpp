@@ -28,6 +28,10 @@ void Application::update() {
     window = glfwCreateWindow(windowWidth, windowHeight, title.c_str(), NULL, NULL);
 
     if (!window) {
+        const char* description;
+        int code = glfwGetError(&description);
+        if (description)
+            std::cout << description << " Code: " << code << std::endl;
         glfwTerminate();
         exit(EXIT_FAILURE);
     }
