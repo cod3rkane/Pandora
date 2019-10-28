@@ -55,8 +55,16 @@ void Game::init(GLFWwindow* mainWindow, int windowWidth, int windowHeight) {
     uiManager.addComponent(panel2);
 
     UI::CoreComponent* button = new UI::Button();
-    button->setPosition(glm::vec3((float)windowWidth/2, (float)windowHeight/2, 0.0f));
+    button->setPosition(glm::vec3((float)windowWidth/2, (float)(windowHeight - button->getWidth() - 20.0f), 0.0f));
     uiManager.addComponent(button);
+
+    UI::CoreComponent* button2 = new UI::Button();
+    button2->setPosition(glm::vec3(static_cast<float>(windowWidth / 2 - button2->getWidth() - 20.0f), (float)(windowHeight - button->getWidth() - 20.0f), 0.0f));
+    uiManager.addComponent(button2);
+
+    UI::CoreComponent* button3 = new UI::Button();
+    button3->setPosition(glm::vec3(static_cast<float>(windowWidth / 2 + button2->getWidth() + 20.0f), (float)(windowHeight - button->getWidth() - 20.0f), 0.0f));
+    uiManager.addComponent(button3);
 
     // @TODO once we've component to setup.
     uiManager.setupComponents();
