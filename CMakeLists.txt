@@ -43,7 +43,7 @@ add_executable(
   src/core/Window.h
   src/core/ui/Button.cpp
   src/core/ui/Button.h
-)
+        src/core/ui/CoreComponent.cpp src/core/ui/CoreComponent.h)
 
 pkg_search_module(GLEW REQUIRED glew)
 include_directories(${GLEW_INCLUDE_DIRS})
