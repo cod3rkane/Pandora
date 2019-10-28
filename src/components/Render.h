@@ -6,6 +6,7 @@
 #define CGAME_RENDERABLE_H
 
 #include <iostream>
+#include <vector>
 #include <glm/ext.hpp>
 
 struct Renderable {
