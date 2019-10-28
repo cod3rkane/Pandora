@@ -3,14 +3,15 @@
 
 #include <iostream>
 
-#include "UIComponent.h"
+#include "CoreComponent.h"
 
 namespace UI {
-    class Button : public UI::Component {
+    class Button : public UI::CoreComponent {
     public:
-        Button() : UI::Component() {
-            isInteractive = true;
+        Button(): UI::CoreComponent::CoreComponent() {
+            UI::CoreComponent::setInteractive(true);
         }
+        void update(double mouseX, double mouseY, bool isMousePressed) override;
     };
 }
 
