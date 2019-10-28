@@ -43,19 +43,19 @@ void Game::init(GLFWwindow* mainWindow, int windowWidth, int windowHeight) {
     uiManager.setReg(reg);
     uiManager.init();
     
-    UI::Component panel;
-    panel.setWidth(100.0f);
-    panel.setPosition(glm::vec3(50.0f, 50.0f, 0.0f));
-    panel.setColorMesh(glm::vec4(0.32549f, 0.364706f, 0.709804f, 1.0f));
+    UI::CoreComponent* panel = new UI::Component();
+    panel->setWidth(100.0f);
+    panel->setPosition(glm::vec3(50.0f, 50.0f, 0.0f));
+    panel->setColorMesh(glm::vec4(0.32549f, 0.364706f, 0.709804f, 1.0f));
     uiManager.addComponent(panel);
 
-    UI::Component panel2;
-    panel2.setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
-    panel2.setColorMesh(glm::vec4(0.0196078f, 0.909804f, 0.419608f, 0.3f));
+    UI::CoreComponent* panel2 = new UI::Component();
+    panel2->setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+    panel2->setColorMesh(glm::vec4(0.0196078f, 0.909804f, 0.419608f, 0.3f));
     uiManager.addComponent(panel2);
 
-    UI::Button button;
-    button.setPosition(glm::vec3((float)windowWidth/2, (float)windowHeight/2, 0.0f));
+    UI::CoreComponent* button = new UI::Button();
+    button->setPosition(glm::vec3((float)windowWidth/2, (float)windowHeight/2, 0.0f));
     uiManager.addComponent(button);
 
     // @TODO once we've component to setup.
