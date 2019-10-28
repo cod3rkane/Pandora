@@ -6,7 +6,7 @@ UIManager::UIManager(Registry &reg) {
     this->reg = &reg;
 }
 
-void UIManager::addComponent(UI::Component component) {
+void UIManager::addComponent(UI::CoreComponent *component) {
     components.push_back(component);
 }
 
@@ -29,9 +29,8 @@ void UIManager::setupComponents() {
     glBindVertexArray(vaoID);
     glBindBuffer(GL_ARRAY_BUFFER, vboID);
 
-    for (UI::Component component : components) {
-        // std::vector<Vertex2D> vertices = component.getVertices();
-        glBufferData(GL_ARRAY_BUFFER, component.getVertices().size() * sizeof(Vertex2D), &component.getVertices()[0], GL_STATIC_DRAW);
+    for (const UI::CoreComponent* component : components) {
+        glBufferData(GL_ARRAY_BUFFER, component->getMesh().vertices.size() * sizeof(Vertex2D), &component->getMesh().vertices[0], GL_STATIC_DRAW);
     }
 
     // Vertex positions
@@ -86,11 +85,11 @@ void UIManager::update(float deltaTime, int windowWidth, int windowHeight) {
     projection = glm::ortho(0.0f, (float)windowWidth, (float)windowHeight, 0.0f, -1.0f, 1.0f);
 
     // Update matrices always after changes
-    for (UI::Component component : components) {
-        component.update(windowWidth, windowHeight, mouseX, mouseY, (bool)mouseLeftBtn == GLFW_PRESS);
+    for (UI::CoreComponent* component : components) {
+        component->update(mouseX, mouseY, mouseLeftBtn == GLFW_PRESS);
 
-        modelMatrices.push_back(component.getModelMatrix(windowWidth, windowHeight));
-        colorMatrices.push_back(component.getMesh().color);
+        modelMatrices.push_back(component->getModelMatrix());
+        colorMatrices.push_back(component->getMesh().color);
     }
 }
 

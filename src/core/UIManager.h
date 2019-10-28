@@ -11,6 +11,7 @@
 
 #include "../util/registry.h"
 #include "ui/UIComponent.h"
+#include "ui/CoreComponent.h"
 #include "ui/Button.h"
 #include "Shader.h"
 #include "../components/Render.h"
@@ -25,7 +26,7 @@ class UIManager {
     Core::Shader shader2d;
     GLuint tmBufferID;
     GLuint colorBufferID;
-    std::vector<UI::Component> components;
+    std::vector<UI::CoreComponent*> components;
     std::vector<glm::vec4> colorMatrices;
     std::vector<glm::mat4> modelMatrices;
     glm::mat4 projection;
@@ -33,7 +34,7 @@ class UIManager {
 public:
     UIManager();
     UIManager(Registry &reg);
-    void addComponent(UI::Component component);
+    void addComponent(UI::CoreComponent* component);
     void setReg(Registry &r);
     void setupComponents();
 
