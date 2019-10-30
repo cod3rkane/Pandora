@@ -17,7 +17,7 @@
 namespace UI {
     class Component : public UI::CoreComponent {
     public:
-        void update(double mouseX, double mouseY, bool isMousePressed) override;
+        void update() override;
     };
 }
 

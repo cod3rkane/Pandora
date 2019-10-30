@@ -42,7 +42,7 @@ void Game::init(GLFWwindow* mainWindow, int windowWidth, int windowHeight) {
 
     uiManager.setReg(reg);
     uiManager.init();
-    
+
     UI::CoreComponent* panel = new UI::Component();
     panel->setWidth(100.0f);
     panel->setPosition(glm::vec3(50.0f, 50.0f, 0.0f));

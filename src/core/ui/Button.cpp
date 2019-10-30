@@ -1,5 +1,10 @@
 #include "Button.h"
 
+void UI::Button::update() {
+
+}
+
+
 void UI::Button::update(double mouseX, double mouseY, bool isMousePressed) {
     if (interactive) {
         if (

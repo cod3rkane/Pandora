@@ -56,7 +56,9 @@ namespace UI {
 
         void setColorMesh(const glm::vec4 &color);
 
-        virtual void update(double mouseX, double mouseY, bool isMousePressed) = 0;
+        virtual void update() {};
+
+        virtual void update(double mouseX, double mouseY, bool isMousePressed) {};
     private:
         void setup();
     };

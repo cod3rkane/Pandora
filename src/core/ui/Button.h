@@ -11,6 +11,7 @@ namespace UI {
         Button(): UI::CoreComponent::CoreComponent() {
             UI::CoreComponent::setInteractive(true);
         }
+        void update() override;
         void update(double mouseX, double mouseY, bool isMousePressed) override;
     };
 }
