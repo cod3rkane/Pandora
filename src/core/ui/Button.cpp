@@ -1,11 +1,13 @@
 #include "Button.h"
 
 void UI::Button::update() {
-
+    UI::CoreComponent::runConstraints();
 }
 
 
 void UI::Button::update(double mouseX, double mouseY, bool isMousePressed) {
+    UI::CoreComponent::runConstraints();
+
     if (interactive) {
         if (
                 mouseX >= position.x
