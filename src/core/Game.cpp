@@ -43,27 +43,25 @@ void Game::init(GLFWwindow* mainWindow, int windowWidth, int windowHeight) {
     uiManager.setReg(reg);
     uiManager.init();
 
-    UI::CoreComponent* panel = new UI::Component();
-    panel->setWidth(100.0f);
-    panel->setPosition(glm::vec3(50.0f, 50.0f, 0.0f));
-    panel->setColorMesh(glm::vec4(0.32549f, 0.364706f, 0.709804f, 1.0f));
-    uiManager.addComponent(panel);
-
-    UI::CoreComponent* panel2 = new UI::Component();
-    panel2->setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
-    panel2->setColorMesh(glm::vec4(0.0196078f, 0.909804f, 0.419608f, 0.3f));
-    uiManager.addComponent(panel2);
-
     UI::CoreComponent* button = new UI::Button();
-    button->setPosition(glm::vec3((float)windowWidth/2, (float)(windowHeight - button->getWidth() - 20.0f), 0.0f));
+    UI::Constraints* buttonConstraint = new UI::Constraints();
+    buttonConstraint->setX(UI::ConstraintsType::CENTER);
+    buttonConstraint->setY(UI::ConstraintsType::PERCENTAGE, 99);
+    button->setConstraints(buttonConstraint);
     uiManager.addComponent(button);
 
     UI::CoreComponent* button2 = new UI::Button();
-    button2->setPosition(glm::vec3(static_cast<float>(windowWidth / 2 - button2->getWidth() - 20.0f), (float)(windowHeight - button->getWidth() - 20.0f), 0.0f));
+    UI::Constraints* button2Constraint = new UI::Constraints();
+    button2Constraint->setX(UI::ConstraintsType::CENTER, 60);
+    button2Constraint->setY(UI::ConstraintsType::PERCENTAGE, 99);
+    button2->setConstraints(button2Constraint);
     uiManager.addComponent(button2);
 
     UI::CoreComponent* button3 = new UI::Button();
-    button3->setPosition(glm::vec3(static_cast<float>(windowWidth / 2 + button2->getWidth() + 20.0f), (float)(windowHeight - button->getWidth() - 20.0f), 0.0f));
+    UI::Constraints* button3Constraint = new UI::Constraints();
+    button3Constraint->setX(UI::ConstraintsType::CENTER, -60);
+    button3Constraint->setY(UI::ConstraintsType::PERCENTAGE, 99);
+    button3->setConstraints(button3Constraint);
     uiManager.addComponent(button3);
 
     // @TODO once we've component to setup.
