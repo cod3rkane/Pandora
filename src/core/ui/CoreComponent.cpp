@@ -97,3 +97,19 @@ void UI::CoreComponent::setColorMesh(const glm::vec4 &color) {
 UI::CoreComponent::~CoreComponent() {
 
 }
+
+UI::Constraints *UI::CoreComponent::getConstraints() const {
+    return constraints;
+}
+
+void UI::CoreComponent::setConstraints(UI::Constraints *constraints) {
+    CoreComponent::constraints = constraints;
+}
+
+void UI::CoreComponent::runConstraints() {
+    if (constraints != nullptr) {
+        setWidth(static_cast<float>(constraints->getWidth(static_cast<int>(width))));
+        setHeight(static_cast<float>(constraints->getHeight(height)));
+        setPosition(glm::vec3(static_cast<float>(constraints->getX(width)), static_cast<float>(constraints->getY(height)), 0.0f));
+    }
+}

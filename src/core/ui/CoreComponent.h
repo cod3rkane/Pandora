@@ -9,6 +9,7 @@
 
 #include "../../components/Render.h"
 #include "../../util/registry.h"
+#include "Constraints.h"
 
 namespace UI {
     class CoreComponent {
@@ -20,6 +21,7 @@ namespace UI {
         GLfloat rotate = 0.0f;
         Entity entity;
         bool interactive = false;
+        UI::Constraints* constraints = nullptr;
     public:
         CoreComponent();
         ~CoreComponent();
@@ -56,9 +58,20 @@ namespace UI {
 
         void setColorMesh(const glm::vec4 &color);
 
-        virtual void update() {};
+        Constraints *getConstraints() const;
 
-        virtual void update(double mouseX, double mouseY, bool isMousePressed) {};
+        void setConstraints(Constraints *constraints);
+
+        void runConstraints();
+
+        virtual void update() {
+            runConstraints();
+        };
+
+        virtual void update(double mouseX, double mouseY, bool isMousePressed) {
+            runConstraints();
+        };
+
     private:
         void setup();
     };
