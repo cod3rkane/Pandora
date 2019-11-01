@@ -73,10 +73,6 @@ void UIManager::setupComponents() {
 }
 
 void UIManager::update(float deltaTime, int windowWidth, int windowHeight) {
-    // get only interactive items
-    // std::vector<UI::Component> interactives;
-    // std::copy_if(components.begin(), components.end(), std::back_inserter(interactives), [](UI::Component e) { return e.getIsInteractive(); });
-
     Core::Window* Window = &entt::service_locator<Core::Window>::ref();
     double mouseX, mouseY;
     glfwGetCursorPos(Window->getWindow(), &mouseX, &mouseY);
