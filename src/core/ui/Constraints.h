@@ -19,13 +19,13 @@ namespace UI {
 
     class Constraints {
         ConstraintsType xConstrain;
-        int xValue{} ;
+        int xValue;
         ConstraintsType yConstrain;
-        int yValue{};
+        int yValue;
         ConstraintsType widthConstrain;
-        int widthValue{};
+        int widthValue;
         ConstraintsType heightConstrain;
-        int heightValue{};
+        int heightValue;
         Core::Window* Window = &entt::service_locator<Core::Window>::ref();
     public:
         void setX(ConstraintsType type);

@@ -74,13 +74,11 @@ int UI::Constraints::getY(const int *height = nullptr) {
 
 int UI::Constraints::getWidth(int defaultWidth) {
     switch (widthConstrain) {
-        case PERCENTAGE:
+        case UI::ConstraintsType::PERCENTAGE:
             return (Window->getWidth() * widthValue) / 100;
 
-        case PIXEL:
+        case UI::ConstraintsType::PIXEL:
             return widthValue;
-        case CENTER:
-            break;
 
         default:
             return defaultWidth;
