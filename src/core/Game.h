@@ -16,12 +16,14 @@
 #include "Window.h"
 #include "game-state/GameState.h"
 #include "../gui/MainMenu.h"
+#include "../gui/InventoryBar.h"
 
 class Game {
     Registry reg;
     UIManager uiManager;
     GameStateTypes currentState = GameStateTypes::MAIN_MENU;
     GUI::MainMenu mainMenu;
+    GUI::InventoryBar inventoryBar;
 public:
     Game();
     void init(GLFWwindow* mainWindow, int windowWidth, int windowHeight);

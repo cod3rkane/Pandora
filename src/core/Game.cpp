@@ -39,27 +39,7 @@ void Game::init(GLFWwindow* mainWindow, int windowWidth, int windowHeight) {
     uiManager.init();
 
     mainMenu.init(uiManager, &currentState);
-
-    UI::CoreComponent* button = new UI::Button();
-    UI::Constraints* buttonConstraint = new UI::Constraints();
-    buttonConstraint->setX(UI::ConstraintsType::CENTER);
-    buttonConstraint->setY(UI::ConstraintsType::PERCENTAGE, 99);
-    button->setConstraints(buttonConstraint);
-    uiManager.addComponent(button);
-
-    UI::CoreComponent* button2 = new UI::Button();
-    UI::Constraints* button2Constraint = new UI::Constraints();
-    button2Constraint->setX(UI::ConstraintsType::CENTER, 60);
-    button2Constraint->setY(UI::ConstraintsType::PERCENTAGE, 99);
-    button2->setConstraints(button2Constraint);
-    uiManager.addComponent(button2);
-
-    UI::CoreComponent* button3 = new UI::Button();
-    UI::Constraints* button3Constraint = new UI::Constraints();
-    button3Constraint->setX(UI::ConstraintsType::CENTER, -60);
-    button3Constraint->setY(UI::ConstraintsType::PERCENTAGE, 99);
-    button3->setConstraints(button3Constraint);
-    uiManager.addComponent(button3);
+    inventoryBar.init(uiManager);
 
     // @TODO once we've component to setup.
     uiManager.setupComponents();
@@ -81,6 +61,7 @@ void Game::update(float deltaTime, int windowWidth, int windowHeight) {
             mainMenu.update();
             break;
         case GameStateTypes::RUN:
+            inventoryBar.render();
             System::userInputs(reg, deltaTime);
             System::transformations(reg, deltaTime, windowWidth, windowHeight);
             break;
@@ -119,6 +100,7 @@ void Game::start(float deltaTime, int windowWidth, int windowHeight) {
 
 void Game::clean() {
     mainMenu.clean();
+    inventoryBar.clean();
     uiManager.clean();
     System::cleanRender(reg);
 }
