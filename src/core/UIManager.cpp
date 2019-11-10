@@ -10,6 +10,20 @@ void UIManager::addComponent(UI::CoreComponent *component) {
     components.push_back(component);
 }
 
+void UIManager::removeComponent(UI::CoreComponent* component) {
+    cleanBuffers();
+    genBuffers();
+
+    for (int i = 0; i < components.size(); i++) {
+        if (components[i] == component) {
+            components.erase(components.begin() + i);
+            break;
+        }
+    }
+
+    setupComponents();
+}
+
 void UIManager::setReg(Registry &r) {
     reg = &r;
 }
@@ -20,8 +34,7 @@ void UIManager::init() {
     view = glm::mat4(1.0f);
     projection = glm::mat4(1.0f);
 
-    glGenVertexArrays(1, &vaoID);
-    glGenBuffers(1, &vboID);
+    genBuffers();
 }
 
 void UIManager::setupComponents() {
@@ -35,14 +48,14 @@ void UIManager::setupComponents() {
 
     // Vertex positions
 
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex2D), (void*)0);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex2D), (void*)nullptr);
     glEnableVertexAttribArray(0);
 
     // Vertex colors
     glGenBuffers(1, &colorBufferID);
     glBindBuffer(GL_ARRAY_BUFFER, colorBufferID);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec4) * components.size(), 0, GL_DYNAMIC_DRAW);
-    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(glm::vec4), (void*)0);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec4) * components.size(), nullptr, GL_STATIC_DRAW);
+    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(glm::vec4), (void*)nullptr);
     glEnableVertexAttribArray(1);
     glVertexAttribDivisor(1, 1);
 
@@ -52,7 +65,7 @@ void UIManager::setupComponents() {
 
     glGenBuffers(1, &tmBufferID);
     glBindBuffer(GL_ARRAY_BUFFER, tmBufferID);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4) * components.size(), 0, GL_DYNAMIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4) * components.size(), nullptr, GL_STATIC_DRAW);
 
     glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(sizeof(float) * 0));
 	glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(sizeof(float) * 4));
@@ -100,10 +113,10 @@ void UIManager::render(float deltaTime, int windowWidth, int windowHeight) {
     glUniformMatrix4fv(glGetUniformLocation(shader2d.getProgramID(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 
     glBindBuffer(GL_ARRAY_BUFFER, tmBufferID);
-    glBufferData(GL_ARRAY_BUFFER, modelMatrices.size() * sizeof(glm::mat4), &modelMatrices[0], GL_DYNAMIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, modelMatrices.size() * sizeof(glm::mat4), &modelMatrices[0], GL_STATIC_DRAW);
 
     glBindBuffer(GL_ARRAY_BUFFER, colorBufferID);
-    glBufferData(GL_ARRAY_BUFFER, colorMatrices.size() * sizeof(glm::vec4), &colorMatrices[0], GL_DYNAMIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, colorMatrices.size() * sizeof(glm::vec4), &colorMatrices[0], GL_STATIC_DRAW);
 
     glDrawArraysInstanced(GL_TRIANGLES, 0, components.size() * 6, components.size());
 
@@ -119,6 +132,15 @@ void UIManager::render(float deltaTime, int windowWidth, int windowHeight) {
 
 void UIManager::clean() {
     shader2d.cleanUp();
+    cleanBuffers();
+}
+
+void UIManager::genBuffers() {
+    glGenVertexArrays(1, &vaoID);
+    glGenBuffers(1, &vboID);
+}
+
+void UIManager::cleanBuffers() {
     glDeleteVertexArrays(1, &vaoID);
     glDeleteBuffers(1, &vboID);
 }

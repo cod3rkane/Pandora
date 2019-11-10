@@ -35,10 +35,12 @@ public:
     UIManager();
     UIManager(Registry &reg);
     void addComponent(UI::CoreComponent* component);
+    void removeComponent(UI::CoreComponent* component);
     void setReg(Registry &r);
     void setupComponents();
-
     void init();
+    void genBuffers();
+    void cleanBuffers();
     void update(float deltaTime, int windowWidth, int windowHeight);
     void render(float deltaTime, int windowWidth, int windowHeight);
     void clean();
