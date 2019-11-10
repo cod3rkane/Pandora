@@ -72,6 +72,10 @@ namespace UI {
             runConstraints();
         };
 
+        virtual void setCallback(const std::function<void()>& cb) {
+
+        };
+
     private:
         void setup();
     };
