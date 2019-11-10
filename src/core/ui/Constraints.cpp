@@ -101,7 +101,7 @@ int UI::Constraints::getHeight(int defaultHeight) {
 float UI::Constraints::getY(float height) {
     switch (yConstrain) {
         case UI::ConstraintsType::CENTER:
-            return Window->getHeight() / 2 - height;
+            return (Window->getHeight() / 2 - (height / 2)- yValue);
 
         case UI::ConstraintsType::PERCENTAGE:
             return Window->getHeight() * yValue / 100 - height;
