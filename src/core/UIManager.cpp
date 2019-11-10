@@ -11,8 +11,8 @@ void UIManager::addComponent(UI::CoreComponent *component) {
 }
 
 void UIManager::removeComponent(UI::CoreComponent* component) {
-    cleanBuffers();
-    genBuffers();
+//    cleanBuffers();
+//    genBuffers();
 
     for (int i = 0; i < components.size(); i++) {
         if (components[i] == component) {
@@ -21,7 +21,7 @@ void UIManager::removeComponent(UI::CoreComponent* component) {
         }
     }
 
-    setupComponents();
+//    setupComponents();
 }
 
 void UIManager::setReg(Registry &r) {
