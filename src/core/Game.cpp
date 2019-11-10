@@ -8,12 +8,7 @@
 
 #include "../system/transformations.h"
 #include "../system/interactions.h"
-#include "../components/Shader.h"
-#include "../components/Render.h"
-#include "../components/Transform.h"
-#include "../util/Camera.h"
 #include "Terrain.h"
-#include "ui/UIComponent.h"
 #include "ui/Button.h"
 
 Game::Game() {
@@ -42,6 +37,8 @@ void Game::init(GLFWwindow* mainWindow, int windowWidth, int windowHeight) {
 
     uiManager.setReg(reg);
     uiManager.init();
+
+    mainMenu.init(uiManager);
 
     UI::CoreComponent* button = new UI::Button();
     UI::Constraints* buttonConstraint = new UI::Constraints();
@@ -78,6 +75,8 @@ void Game::update(float deltaTime, int windowWidth, int windowHeight) {
     // get inputs
     // create world
     System::preRender(reg);
+
+    mainMenu.update();
     
     uiManager.update(deltaTime, windowWidth, windowHeight);
     System::userInputs(reg, deltaTime);
@@ -88,11 +87,27 @@ void Game::start(float deltaTime, int windowWidth, int windowHeight) {
     // game loop
     // render things
     // Load Systems
-    System::render(reg, deltaTime, windowWidth, windowHeight);
     uiManager.render(deltaTime, windowWidth, windowHeight);
+
+    switch (currentState) {
+        case GameStateTypes::MAIN_MENU:
+            // Draw MainMenu
+            mainMenu.render();
+            break;
+        case GameStateTypes::RUN:
+            // Start Timer
+            System::render(reg, deltaTime, windowWidth, windowHeight);
+            break;
+        case GameStateTypes::PAUSE:
+            // Stop Timer
+            break;
+        default:
+            break;
+    }
 }
 
 void Game::clean() {
+    mainMenu.clean();
     uiManager.clean();
     System::cleanRender(reg);
 }
