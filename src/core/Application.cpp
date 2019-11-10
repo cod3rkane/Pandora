@@ -54,7 +54,7 @@ void Application::start() {
     game.init(window, windowWidth, windowHeight);
 
     while (!glfwWindowShouldClose(window)) {
-        // per-frame time lofic
+        // per-frame time logic
         float currentFrame = glfwGetTime();
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
