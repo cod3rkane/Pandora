@@ -12,8 +12,9 @@ GUI::MainMenu::MainMenu(UIManager *manager) {
 
 }
 
-void GUI::MainMenu::init(UIManager &manager) {
+void GUI::MainMenu::init(UIManager &manager, GameStateTypes* state) {
     uiManager = &manager;
+    gameState = state;
     const float btnSize = 250.0f;
 
     auto* bgConstraint = new UI::Constraints();
@@ -25,21 +26,25 @@ void GUI::MainMenu::init(UIManager &manager) {
     uiManager->addComponent(bgComponent);
 
     auto* newGameConstraint = new UI::Constraints();
-    newGameConstraint->setY(UI::ConstraintsType::CENTER, -50);
+    newGameConstraint->setY(UI::ConstraintsType::CENTER, 50);
     newGameBtn->setConstraints(newGameConstraint);
-    newGameBtn->setColorMesh(glm::vec4(0.207843f, 0.694118f, 0.831373f, 1.0f));
+    newGameBtn->setColorMesh(glm::vec4(0.168627f, 0.780392f, 0.203922f, 1.0f));
     newGameBtn->setWidth(btnSize);
+    newGameBtn->setCallback([=]()-> void {
+        *gameState = GameStateTypes::RUN;
+        clean();
+    });
     uiManager->addComponent(newGameBtn);
 
     auto* savedGameConstraint = new UI::Constraints();
-    savedGameConstraint->setY(UI::ConstraintsType::CENTER, 10);
+    savedGameConstraint->setY(UI::ConstraintsType::CENTER, -10);
     savedGameBtn->setConstraints(savedGameConstraint);
     savedGameBtn->setColorMesh(glm::vec4(0.207843f, 0.694118f, 0.831373f, 1.0f));
     savedGameBtn->setWidth(btnSize);
     uiManager->addComponent(savedGameBtn);
 
     auto* exitGameConstraint = new UI::Constraints();
-    exitGameConstraint->setY(UI::ConstraintsType::CENTER, 70);
+    exitGameConstraint->setY(UI::ConstraintsType::CENTER, -70);
     exitGameBtn->setConstraints(exitGameConstraint);
     exitGameBtn->setColorMesh(glm::vec4(0.207843f, 0.694118f, 0.831373f, 1.0f));
     exitGameBtn->setWidth(btnSize);
@@ -47,7 +52,7 @@ void GUI::MainMenu::init(UIManager &manager) {
 }
 
 GUI::MainMenu::~MainMenu() {
-
+    clean();
 }
 
 void GUI::MainMenu::update() {
@@ -59,5 +64,8 @@ void GUI::MainMenu::render() {
 }
 
 void GUI::MainMenu::clean() {
-
+    uiManager->removeComponent(bgComponent);
+    uiManager->removeComponent(newGameBtn);
+    uiManager->removeComponent(savedGameBtn);
+    uiManager->removeComponent(exitGameBtn);
 }

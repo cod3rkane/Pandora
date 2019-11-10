@@ -11,11 +11,12 @@
 #include "../core/ui/Button.h"
 #include "../core/UIManager.h"
 #include "../core/ui/Constraints.h"
+#include "../core/game-state/GameState.h"
 
 namespace GUI {
     class MainMenu {
-    private:
         UIManager* uiManager;
+        GameStateTypes* gameState;
         UI::CoreComponent* bgComponent = new UI::Component();
         UI::CoreComponent* newGameBtn = new UI::Button();
         UI::CoreComponent* savedGameBtn = new UI::Button();
@@ -24,7 +25,7 @@ namespace GUI {
         MainMenu();
         explicit MainMenu(UIManager* manager);
         ~MainMenu();
-        void init(UIManager& manager);
+        void init(UIManager& manager, GameStateTypes* state);
         void update();
         void render();
         void clean();
