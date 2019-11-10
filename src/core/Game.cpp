@@ -38,7 +38,7 @@ void Game::init(GLFWwindow* mainWindow, int windowWidth, int windowHeight) {
     uiManager.setReg(reg);
     uiManager.init();
 
-    mainMenu.init(uiManager);
+    mainMenu.init(uiManager, &currentState);
 
     UI::CoreComponent* button = new UI::Button();
     UI::Constraints* buttonConstraint = new UI::Constraints();
@@ -76,18 +76,27 @@ void Game::update(float deltaTime, int windowWidth, int windowHeight) {
     // create world
     System::preRender(reg);
 
-    mainMenu.update();
+    switch (currentState) {
+        case GameStateTypes::MAIN_MENU:
+            mainMenu.update();
+            break;
+        case GameStateTypes::RUN:
+            System::userInputs(reg, deltaTime);
+            System::transformations(reg, deltaTime, windowWidth, windowHeight);
+            break;
+        case GameStateTypes::PAUSE:
+            break;
+        default:
+            break;
+    }
     
     uiManager.update(deltaTime, windowWidth, windowHeight);
-    System::userInputs(reg, deltaTime);
-    System::transformations(reg, deltaTime, windowWidth, windowHeight);
 }
 
 void Game::start(float deltaTime, int windowWidth, int windowHeight) {
     // game loop
     // render things
     // Load Systems
-    uiManager.render(deltaTime, windowWidth, windowHeight);
 
     switch (currentState) {
         case GameStateTypes::MAIN_MENU:
@@ -104,6 +113,8 @@ void Game::start(float deltaTime, int windowWidth, int windowHeight) {
         default:
             break;
     }
+
+    uiManager.render(deltaTime, windowWidth, windowHeight);
 }
 
 void Game::clean() {
